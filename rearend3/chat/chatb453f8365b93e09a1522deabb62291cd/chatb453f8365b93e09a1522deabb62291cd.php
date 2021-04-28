@@ -1,0 +1,5 @@
+<?php
+				header('Access-Control-Allow-Origin:*');
+				header('Access-Control-Allow-Methods:POST');//表示只允许POST请求
+				header('Access-Control-Allow-Headers:x-requested-with, content-type'); 
+				echo '{"context":"","imgpath":",","filepath":","},-';echo '{"context":"2021-04-24 1:13:8   14557:\n  \u4f60\u597d\n\n","imgpath":",","filepath":","},-';echo '{"context":"2021-04-26 17:6:49   14557:\n  \n","imgpath":"http:\/\/localhost:5001\/chat\/chatb453f8365b93e09a1522deabb62291cd\/userimg\/06a56c7dad19a8fc4220ce2ffcac0c3d2.jpg,","filepath":","},-';echo '{"context":"2021-04-26 18:24:2   14557:\n  \u4f60\u597d\n\n","imgpath":",","filepath":","},-';echo '{"context":"2021-04-26 18:24:21   14557:\n  \u8bbe\u8ba1\n\n","imgpath":",","filepath":","},-';echo '{"context":"2021-04-26 18:24:51   14557:\n  \u5f97\u5230\n\n","imgpath":",","filepath":","},-';echo '{"context":"2021-04-26 18:27:8   14557:\n  123\n\n","imgpath":",","filepath":","},-';echo '{"context":"2021-04-26 18:27:11   14557:\n  456\n\n","imgpath":",","filepath":","},-';echo '{"context":"2021-04-26 21:1:14   14557:\n  \u8bbe\u8ba1\n\n","imgpath":",","filepath":","},-';

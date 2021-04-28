@@ -1,0 +1,6 @@
+#app {background-color: coral;}
+.image{
+	background-image: url("../image/QQ图片20200720204829.png");
+   height: 100px;
+   width: 100px;
+}

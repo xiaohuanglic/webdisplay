@@ -1,0 +1,52 @@
+{
+  "name": "webpacks",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "webpack-dev-server --hot"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/core": "^7.11.1",
+    "@babel/plugin-proposal-class-properties": "^7.10.4",
+    "@babel/plugin-transform-runtime": "^7.11.0",
+    "@babel/preset-env": "^7.11.0",
+    "babel-loader": "^8.1.0",
+    "css-loader": "^4.2.1",
+    "file-loader": "^6.0.0",
+    "html-webpack-plugin": "^4.3.0",
+    "sass-loader": "^9.0.3",
+    "style-loader": "^1.2.1",
+    "url-loader": "^4.1.0",
+    "vue-loader": "^15.9.3",
+    "vue-template-compiler": "^2.6.12",
+    "webpack": "^4.44.1"
+  },
+  "dependencies": {
+    "axios": "^0.19.2",
+    "bootstrap": "^4.6.0",
+    "bootstrap-vue": "^2.21.2",
+    "fs": "0.0.1-security",
+    "jquery": "^3.5.1",
+    "lib-flexible": "^0.3.2",
+    "open-iconic": "^1.1.1",
+    "postcss-px2rem": "^0.3.0",
+    "qs": "^6.9.4",
+    "vue": "^2.6.12",
+    "vue-router": "^3.4.3",
+    "vue-session": "^1.0.0",
+    "vue-sessionstorage": "^1.0.0",
+    "webpack-cli": "^3.3.12",
+    "webpack-dev-server": "^3.11.0",
+    "webpack-php-loader": "^0.5.0"
+  },
+  "postcss": {
+    "plugins": {
+      "autoprefixer": {},
+      "precss": {}
+    }
+  }
+}
