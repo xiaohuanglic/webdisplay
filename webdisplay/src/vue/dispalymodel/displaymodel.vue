@@ -12,6 +12,7 @@
 <script>
 	import axios from "axios";
 	import display1 from './choosedisplay/display1.vue';
+  import url from "../../js/totalurl.js";
 	// import display2 from './choosedisplay/display2.vue';
 	import display3 from './choosedisplay/display3.vue';
 	export default{
@@ -45,18 +46,33 @@
     	// 先设定先，迟点再修改
       // "personalkn5sti32"
     	var personid = this.getpersonid;
-    
+      // console.log(personid)
       // var personid = "personalkn5sti32";
       // 得到usreid
     	// var userid = JSON.parse(sessionStorage.getItem("vue-session-key"))['username'][1];
-       var sessionid = JSON.parse(sessionStorage.getItem("vue-session-key"))['session-id']
+      this.$nextTick(() => this.getResData(this.getpersonid) );
+      
+     
+    	
+    	
+
+    },
+    methods:{
+    	Jumpdisplay(item){
+         // this.getResData(this.getpersonid);
+    		this.chooseindex = item;
+    		
+    	},
+      getResData(personid){
+         var sessionid = JSON.parse(sessionStorage.getItem("vue-session-key"))['session-id']
         
-                      axios.post('http://localhost:5001/checksession.php',{sessionid:sessionid}).then(res=>{
+                      axios.post(url+'/checksession.php',{sessionid:sessionid}).then(res=>{
                            
                            var userid = res.data['userid'];
                            // var userid = "919384f56f39db240db6888c208e002f";
-                          
-                           axios.get('http://localhost:5001/get.php/?personid='+personid+"&&userid="+userid).then(res=>{
+                            
+                           axios.get(url+'/get.php/?personid='+personid+"&&userid="+userid).then(res=>{
+                              console.log(res.data)
                               if(res.data.job.length==1){
                                 for(var key in res.data.job[0]){
                                    if(res.data.job[0][key]===null){
@@ -101,24 +117,17 @@
                   // JSON.parse(res.data);
                             })
                       })
-     
-    	
-    	
 
-    },
-    methods:{
-    	Jumpdisplay(item){
-    		this.chooseindex = item;
-    		
-    	},
+      },
       savedisplaymodel(){
-      
+
+       
         if(this.chooseindex!='1'&&this.chooseindex!='2'){
           return;
         }
         var personid = this.displaydata.personid
         var isdisplay = this.chooseindex;
-        axios.get('http://localhost:5001/displaymode.php/?personid='+personid+'&&isdisplay='+this.chooseindex).then(res=>{
+        axios.get(url+'/displaymode.php/?personid='+personid+'&&isdisplay='+this.chooseindex).then(res=>{
                       
                          
                           console.log(res.data)

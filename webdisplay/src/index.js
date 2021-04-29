@@ -21,6 +21,7 @@ import mdetail from "./vue/mobile/mdetail.vue"
 import resume from "./vue/resume.vue"
 import display from "./vue/dispalymodel/displaymodel.vue"
 import common from './js/gobal'
+import url from './js/totalurl'
 import newmessage from './js/newmsg'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
@@ -29,6 +30,7 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 
 Vue.prototype.$common = common;
 Vue.prototype.$newmessage = newmessage;
+Vue.prototype.$url = url;
 Vue.use(VueRouter)
 Vue.use(BootstrapVue)
 Vue.use(IconsPlugin)

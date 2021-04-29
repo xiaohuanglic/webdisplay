@@ -13,6 +13,7 @@
 </template>
 <script>
 import axios from "axios";
+import url from "../js/totalurl.js";
 import workexperience from './optionpersonmodel/workexperience.vue';
 import edcexperience from './optionpersonmodel/edcexperience.vue';
  import rightclick from './rightclick.vue';

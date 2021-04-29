@@ -7,6 +7,7 @@ import display3 from './mdispalymodel/mchoosedisplay/mdisplay3.vue'
 import forestage from '../forestage .vue'
 import axios from "axios";
 import Vue from 'vue'
+import url from "../../js/totalurl.js";
  axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8'
 export default {
     
@@ -117,7 +118,7 @@ export default {
                       chatperson(){
                         var sessionid = JSON.parse(sessionStorage.getItem("vue-session-key"))['session-id']
          // console.log(sessionid)
-                      axios.post('http://localhost:5001/checksession.php',{sessionid:sessionid}).then(res=>{
+                      axios.post(url+'/checksession.php',{sessionid:sessionid}).then(res=>{
                       
                         var myid = res.data['userid'];
                         var myname = res.data['username'];
@@ -126,7 +127,7 @@ export default {
                         if(myid==value.userid){
                             return;
                         }
-                        axios.get('http://localhost:5001/getchatperson.php/?userid='+value.userid+"&&myid="+myid).then(res=>{
+                        axios.get(url+'/getchatperson.php/?userid='+value.userid+"&&myid="+myid).then(res=>{
                       // console.log(res.data);
                       console.log(res.data)
                       if(typeof(res.data['chatid']) == "undefined"||res.data=="没有该用户"||typeof(res.data) == "undefined"){
@@ -137,7 +138,7 @@ export default {
                       var username = res.data['username'];
                       var flag = value.userid;
 
-                          axios.post('http://localhost:5001/chat.php',{userid:value.userid,myid:myid,chatmsg:chatmsg,usernum:usernum,myname:myname,username:username,userimg:piclist,flag:flag}).then(res=>{
+                          axios.post(url+'/chat.php',{userid:value.userid,myid:myid,chatmsg:chatmsg,usernum:usernum,myname:myname,username:username,userimg:piclist,flag:flag}).then(res=>{
                    
                
                  
@@ -220,7 +221,7 @@ export default {
                       chatperson(){
              var sessionid = JSON.parse(sessionStorage.getItem("vue-session-key"))['session-id']
          // console.log(sessionid)
-                      axios.post('http://localhost:5001/checksession.php',{sessionid:sessionid}).then(res=>{
+                      axios.post(url+'/checksession.php',{sessionid:sessionid}).then(res=>{
                       
                         var myid = res.data['userid'];
                         var myname = res.data['username'];
@@ -229,7 +230,7 @@ export default {
                         if(myid==value.userid){
                             return;
                         }
-                        axios.get('http://localhost:5001/getchatperson.php/?userid='+value.userid+"&&myid="+myid).then(res=>{
+                        axios.get(url+'/getchatperson.php/?userid='+value.userid+"&&myid="+myid).then(res=>{
                       // console.log(res.data);
                       console.log(res.data)
                       if(typeof(res.data['chatid']) == "undefined"||res.data=="没有该用户"||typeof(res.data) == "undefined"){
@@ -240,7 +241,7 @@ export default {
                       var username = res.data['username'];
                       var flag = value.userid;
 
-                          axios.post('http://localhost:5001/chat.php',{userid:value.userid,myid:myid,chatmsg:chatmsg,usernum:usernum,myname:myname,username:username,userimg:piclist,flag:flag}).then(res=>{
+                          axios.post(url+'/chat.php',{userid:value.userid,myid:myid,chatmsg:chatmsg,usernum:usernum,myname:myname,username:username,userimg:piclist,flag:flag}).then(res=>{
                    
                
                  
@@ -301,7 +302,7 @@ export default {
  
              
            
-           return axios.get('http://localhost:5001/get.php/?'+idname+'='+id+"&&userid="+userid).then(res=>{
+           return axios.get(url+'/get.php/?'+idname+'='+id+"&&userid="+userid).then(res=>{
              
                 return res.data;
              

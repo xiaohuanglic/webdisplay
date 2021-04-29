@@ -32,7 +32,7 @@
   import display3 from '../dispalymodel/choosedisplay/display3.vue'
    import mdisplay1 from '../mobile/mdispalymodel/mchoosedisplay/mdisplay1.vue'
   import mdisplay3 from '../mobile/mdispalymodel/mchoosedisplay/mdisplay3.vue'
-
+import url from "../../js/totalurl.js";
   export default{
     props:['taskid','persondata','distance'],
    components: {
@@ -104,7 +104,7 @@
               var resume={};
               resume['taskid'] = taskid;
                resume['personid'] = personid;
-               axios.post('http://localhost:5001/resume.php',{resume:resume}).then(res=>{
+               axios.post(url+'/resume.php',{resume:resume}).then(res=>{
                 console.log(res.data);
              })
               
@@ -121,11 +121,11 @@
             this.displayflag=false;
               var sessionid = JSON.parse(sessionStorage.getItem("vue-session-key"))['session-id']
          // console.log(sessionid)
-            axios.post('http://localhost:5001/checksession.php',{sessionid:sessionid}).then(res=>{
+            axios.post(url+'/checksession.php',{sessionid:sessionid}).then(res=>{
                var userid = res.data['userid'];
           
 
-            axios.get('http://localhost:5001/get.php/?'+'personid'+'='+data['personid']+"&&userid="+userid).then(res=>{
+            axios.get(url+'/get.php/?'+'personid'+'='+data['personid']+"&&userid="+userid).then(res=>{
               console.log(res.data);
                 var value = res.data;
                   if(value.job.length==1){
@@ -174,12 +174,12 @@
          getpagedata(index){
                      var sessionid = JSON.parse(sessionStorage.getItem("vue-session-key"))['session-id']
          // console.log(sessionid)
-                      axios.post('http://localhost:5001/checksession.php',{sessionid:sessionid}).then(res=>{
+                      axios.post(url+'/checksession.php',{sessionid:sessionid}).then(res=>{
               
                           var userid = res.data['userid']
                       this.$refs.pagination.show = "Boss"
                       
-                       axios.get('http://localhost:5001/gettablepage.php/?page='+index+'&&totalnum='+ this.$refs.pagination.totalnum+'&&size=2&&show='+this.$refs.pagination.show+'&&userid='+userid).then(res=>{
+                       axios.get(url+'/gettablepage.php/?page='+index+'&&totalnum='+ this.$refs.pagination.totalnum+'&&size=2&&show='+this.$refs.pagination.show+'&&userid='+userid).then(res=>{
                       
                             this.$refs.pagination.extractpageData(res.data,index);
 
@@ -248,13 +248,13 @@
                   getpersontable(){
                     // 得到自己用户的数据
                     var sessionid = JSON.parse(sessionStorage.getItem("vue-session-key"))['session-id']
-                     axios.post('http://localhost:5001/checksession.php',{sessionid:sessionid}).then(res=>{
+                     axios.post(url+'/checksession.php',{sessionid:sessionid}).then(res=>{
                         this.flag="persontable"
                     this.show='Boss';
                    
                     var userid = res.data['userid'];
                     // console.log(userid);
-                    axios.get('http://localhost:5001/gettable.php/?show='+this.show+'&&flag='+this.flag+'&&userid='+userid).then(res=>{
+                    axios.get(url+'/gettable.php/?show='+this.show+'&&flag='+this.flag+'&&userid='+userid).then(res=>{
                         var setdata = res.data; 
                         for(var i =0;i<setdata.length;i++){
                         setdata[i] = JSON.parse(setdata[i]);

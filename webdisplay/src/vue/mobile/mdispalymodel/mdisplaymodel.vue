@@ -14,6 +14,7 @@
 	import display1 from './mchoosedisplay/mdisplay1.vue';
 	// import display2 from './choosedisplay/display2.vue';
 	import display3 from './mchoosedisplay/mdisplay3.vue';
+  import url from "../../../js/totalurl.js";
 	export default{
     props:['personid','isdisplay'],
 	  components: {
@@ -51,12 +52,12 @@
     	// var userid = JSON.parse(sessionStorage.getItem("vue-session-key"))['username'][1];
        var sessionid = JSON.parse(sessionStorage.getItem("vue-session-key"))['session-id']
         
-                      axios.post('http://localhost:5001/checksession.php',{sessionid:sessionid}).then(res=>{
+                      axios.post(url+'/checksession.php',{sessionid:sessionid}).then(res=>{
                            
                            var userid = res.data['userid'];
                            // var userid = "919384f56f39db240db6888c208e002f";
                           
-                           axios.get('http://localhost:5001/get.php/?personid='+personid+"&&userid="+userid).then(res=>{
+                           axios.get(url+'/get.php/?personid='+personid+"&&userid="+userid).then(res=>{
                               if(res.data.job.length==1){
                                 for(var key in res.data.job[0]){
                                    if(res.data.job[0][key]===null){
@@ -118,7 +119,7 @@
         }
         var personid = this.displaydata.personid
         var isdisplay = this.chooseindex;
-        axios.get('http://localhost:5001/displaymode.php/?personid='+personid+'&&isdisplay='+this.chooseindex).then(res=>{
+        axios.get(url+'/displaymode.php/?personid='+personid+'&&isdisplay='+this.chooseindex).then(res=>{
                       
                          
                           console.log(res.data)

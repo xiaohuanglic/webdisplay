@@ -11,6 +11,7 @@
  import rightclick from '../rightclick.vue'
   import optionperson from './moptionperson.vue'
    import displaymodel from './mdispalymodel/mdisplaymodel.vue'
+    import url from "../../js/totalurl.js";
  import Vue from 'vue'
  import axios from "axios";
 // 做一个数字标记
@@ -225,7 +226,7 @@
                     
                     if(this.add!='update'){
                         // console.log(1);
-                      axios.get('http://localhost:5001/getpicture.php/?picture=getpicture').then(res=>{
+                      axios.get(url+'/getpicture.php/?picture=getpicture').then(res=>{
                         
                           this.upload = res.data
                       })
@@ -258,7 +259,7 @@
                               };
                        this.rightMenuObj.handler.cancel = function cancel(){
                                   that.$refs.rightclick.rightMenuStatus = "none";
-                                  that.$refs.rightclick.rightMenuTop = "0px";
+                 					that.$refs.rightclick.rightMenuTop = "0px";
                                   that.$refs.rightclick.rightMenuLeft = "0px";
                               };
                       this.$refs.rightclick.rightMenuObj = this.rightMenuObj
@@ -316,7 +317,7 @@
          //        getuserid(perbaseinfo){
          //              var sessionid = JSON.parse(sessionStorage.getItem("vue-session-key"))['session-id']
          // // console.log(sessionid)
-         //              axios.post('http://localhost:5001/checksession.php',{sessionid:sessionid}).then(res=>{
+         //              axios.post(url+'/checksession.php',{sessionid:sessionid}).then(res=>{
          //                  perbaseinfo['userid'] = res.data['userid'];
          //              })
          //        },
@@ -333,7 +334,7 @@
                       }
                 var sessionid = JSON.parse(sessionStorage.getItem("vue-session-key"))['session-id']
          // console.log(sessionid)
-                      axios.post('http://localhost:5001/checksession.php',{sessionid:sessionid}).then(res=>{
+                      axios.post(url+'/checksession.php',{sessionid:sessionid}).then(res=>{
                           if(this.add!='update'){
                       
                       this.add = 'add';
@@ -442,7 +443,7 @@
                   // 要对原先的图片进行删除
                   // 再进行添加
                 
-                 axios.post('http://localhost:5001/person.php',{perbaseinfo:perbaseinfo,perjob:perjob,peredc:peredc}).then(res=>{
+                 axios.post(url+'/person.php',{perbaseinfo:perbaseinfo,perjob:perjob,peredc:peredc}).then(res=>{
                     console.log(res.data)
                     // console.log(res.data);
                               
@@ -569,12 +570,12 @@
                   getpagedata(index){
                      var sessionid = JSON.parse(sessionStorage.getItem("vue-session-key"))['session-id']
          // console.log(sessionid)
-                      axios.post('http://localhost:5001/checksession.php',{sessionid:sessionid}).then(res=>{
+                      axios.post(url+'/checksession.php',{sessionid:sessionid}).then(res=>{
                           // var userid = JSON.parse(sessionStorage.getItem('vue-session-key'))['username'][1];
                           var userid = res.data['userid']
                       this.$refs.pagination.show = "Boss"
                       
-                       axios.get('http://localhost:5001/gettablepage.php/?page='+index+'&&totalnum='+ this.$refs.pagination.totalnum+'&&size=2&&show='+this.$refs.pagination.show+'&&userid='+userid).then(res=>{
+                       axios.get(url+'/gettablepage.php/?page='+index+'&&totalnum='+ this.$refs.pagination.totalnum+'&&size=2&&show='+this.$refs.pagination.show+'&&userid='+userid).then(res=>{
                       
                             this.$refs.pagination.extractpageData(res.data,index);
                               this.disdata = this.$refs.pagination.disdata;
@@ -591,13 +592,13 @@
                   getpersontable(){
                     // 得到自己用户的数据
                     var sessionid = JSON.parse(sessionStorage.getItem("vue-session-key"))['session-id']
-                     axios.post('http://localhost:5001/checksession.php',{sessionid:sessionid}).then(res=>{
+                     axios.post(url+'/checksession.php',{sessionid:sessionid}).then(res=>{
                         this.flag="persontable"
                     this.show='Boss';
                     // var userid = JSON.parse(sessionStorage.getItem('vue-session-key'))['username'][1];
                     var userid = res.data['userid'];
                     // console.log(userid);
-                    axios.get('http://localhost:5001/gettable.php/?show='+this.show+'&&flag='+this.flag+'&&userid='+userid).then(res=>{
+                    axios.get(url+'/gettable.php/?show='+this.show+'&&flag='+this.flag+'&&userid='+userid).then(res=>{
                         var setdata = res.data; 
                         for(var i =0;i<setdata.length;i++){
                         setdata[i] = JSON.parse(setdata[i]);
@@ -670,7 +671,7 @@
               var updateperson = new addp().$mount('#addright')
               // 得到数据
               
-              this.updata = axios.get('http://localhost:5001/get.php/?personid='+item['personid']+"&&userid="+item['userid']).then(res=>{
+              this.updata = axios.get(url+'/get.php/?personid='+item['personid']+"&&userid="+item['userid']).then(res=>{
                    return res.data;
                    
 
@@ -816,7 +817,7 @@
                 methods:{
                   confirm(){
                     
-                    this.updata = axios.get('http://localhost:5001/del.php/?personid='+id.personid+'&&method=delete&&userid='+id.userid).then(res=>{
+                    this.updata = axios.get(url+'/del.php/?personid='+id.personid+'&&method=delete&&userid='+id.userid).then(res=>{
                         console.log(res.data)
                       })
                     that.createPageInstance("delete",Allchild,that,id.personid,id.userid);

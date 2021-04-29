@@ -108,7 +108,7 @@
       watch:{
        Activecode:{
             handler(newName, oldName) {
-            this.ajax('http://localhost:5001/Activeemail.php/?Activecode='+newName,'get',{},{},(res) => {
+            this.ajax(this.$url+'/Activeemail.php/?Activecode='+newName,'get',{},{},(res) => {
                 if(res.data=="账号激活成功"){
                  this.todosList=""
                }
@@ -158,7 +158,7 @@
         sendPhoneCode(mobile,username){
           // 对手机号码进行验证，是不是手机号码 /^1[3-9]\d{9}$/
           // var myRe = "/^1[3-9]\d{9}$/";
-          this.ajax('http://localhost:5001/mobeilphone.php','post',{mobile:mobile,username:username},{headers:{"Content-Type" : "application/json"}},(res)=>{
+          this.ajax(this.$url+'/mobeilphone.php','post',{mobile:mobile,username:username},{headers:{"Content-Type" : "application/json"}},(res)=>{
                 console.log(res.data);
               })
 
@@ -204,7 +204,7 @@
 	   	    	}
           if(this.resetpassword1==this.resetpassword2){
             var flag = "resetpaw";
-            this.ajax('http://localhost:5001/push.php','post',{password:this.resetpassword1,flag:flag,resetcode:this.resetcode},{headers:{"Content-Type" : "application/json"}},(res)=>{
+            this.ajax(this.$url+'/push.php','post',{password:this.resetpassword1,flag:flag,resetcode:this.resetcode},{headers:{"Content-Type" : "application/json"}},(res)=>{
                this.message =res.data;
               })
           }else{
@@ -265,7 +265,7 @@
 	   	    		this.message = "含有非法字符串";
 	   	    		return false;
 	   	    	}
-          this.ajax('http://localhost:5001/push.php','post',{email:this.email,flag:flag},{headers:{"Content-Type" : "application/json"}},(res)=>{
+          this.ajax(this.$url+'/push.php','post',{email:this.email,flag:flag},{headers:{"Content-Type" : "application/json"}},(res)=>{
             // this.message = res.data
               console.log(res.data);
           })
@@ -321,7 +321,7 @@
 	   	    		return false;
 	   	    	}
             var that = this;
-            this.ajax('http://localhost:5001/register.php','post',{username:this.username,password:this.password,email:this.email},{headers:{"Content-Type" : "application/json"}},(res) => {
+            this.ajax(this.$url+'/register.php','post',{username:this.username,password:this.password,email:this.email},{headers:{"Content-Type" : "application/json"}},(res) => {
               console.log(res.data);
               if(res.data=="你的用户名已经注册"||res.data=="你的邮箱已经注册"){
                 that.message = res.data;
@@ -348,7 +348,7 @@
        Sendemail(value){
 
               // this.todosList
-            this.ajax('http://localhost:5001/Activeemail.php','post',{email:value},{headers:{"Content-Type" : "application/json"}},(res) => {
+            this.ajax(this.$url+'/Activeemail.php','post',{email:value},{headers:{"Content-Type" : "application/json"}},(res) => {
                 // console.log(res.data)
                  this.message = res.data
             })
@@ -411,7 +411,8 @@
                 // console.log("");
                 return false;
             }
-            this.ajax('http://localhost:5001/login.php','post',{password:this.password,username:this.username},{headers:{"Content-Type" : "application/json"}},(res) => {
+            console.log(this.$url)
+            this.ajax(this.$url+'/login.php','post',{password:this.password,username:this.username},{headers:{"Content-Type" : "application/json"}},(res) => {
                  if(typeof res.data != "undefined" && res.data != null && res.data != ""){
                  var arr=res.data.split(",");
                  // console.log(arr[0])
@@ -428,7 +429,7 @@
                       }
                       // 存储到服务器上，要拿根据sessionid去拿
                       // session.set('username', arr);
-                       this.ajax('http://localhost:5001/session.php','post',{session:sessonjson},{headers:{"Content-Type" : "application/json"}},(res) => {
+                       this.ajax(this.$url+'/session.php','post',{session:sessonjson},{headers:{"Content-Type" : "application/json"}},(res) => {
                 // console.log(res.data)
                             console.log(res.data);
                       })

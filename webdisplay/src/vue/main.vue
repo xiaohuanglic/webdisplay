@@ -217,7 +217,7 @@ export default {
       getuser(){
          var sessionid = JSON.parse(sessionStorage.getItem("vue-session-key"))['session-id']
          // console.log(sessionid)
-           axios.post('http://localhost:5001/checksession.php',{sessionid:sessionid}).then(res=>{
+           axios.post(this.$url+'/checksession.php',{sessionid:sessionid}).then(res=>{
               console.log(res.data);
               this.myid = res.data['userid'];
               this.username = res.data['username'];
@@ -243,7 +243,7 @@ export default {
           this.getuser();
           //  this.myid = JSON.parse(sessionStorage.getItem("vue-session-key"))['username'][1];
           // this.username = JSON.parse(sessionStorage.getItem("vue-session-key"))['username'][2];
-          axios.post('http://localhost:5001/chat.php',{userid:this.myid,username:this.username}).then(res=>{
+          axios.post(this.$url+'/chat.php',{userid:this.myid,username:this.username}).then(res=>{
             
             res.data = res.data.substr(0,res.data.length-1)
 
@@ -271,7 +271,7 @@ export default {
         },
   			showBoss(){
   				this.show='Boss'
-  					axios.get('http://localhost:5001/get.php/?show='+this.show).then(res=>{
+  					axios.get(this.$url+'/get.php/?show='+this.show).then(res=>{
              
              		 this.extractData(res.data);
             	})
@@ -280,7 +280,7 @@ export default {
 
   			showfree(){
   				this.show='Free'
-  				axios.get('http://localhost:5001/get.php/?show='+this.show).then(res=>{
+  				axios.get(this.$url+'/get.php/?show='+this.show).then(res=>{
               	this.extractData(res.data);
            
             	})
@@ -327,7 +327,7 @@ export default {
             	this.setIndex(index);
             	this.setShow(show);
               
-              axios.get('http://localhost:5001/getpage.php/?page='+index+'&&totalnum='+this.totalnum+'&&size=2&&show='+show).then(res=>{
+              axios.get(this.$url+'/getpage.php/?page='+index+'&&totalnum='+this.totalnum+'&&size=2&&show='+show).then(res=>{
                
                 this.extractpageData(res.data,index);
                 // console.log(res.data);

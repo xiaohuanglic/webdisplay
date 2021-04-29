@@ -117,7 +117,7 @@ export default {
                       chatperson(){
                         var sessionid = JSON.parse(sessionStorage.getItem("vue-session-key"))['session-id']
          // console.log(sessionid)
-                      axios.post('http://localhost:5001/checksession.php',{sessionid:sessionid}).then(res=>{
+                      axios.post(this.$url+'/checksession.php',{sessionid:sessionid}).then(res=>{
                       
                         var myid = res.data['userid'];
                         var myname = res.data['username'];
@@ -126,7 +126,7 @@ export default {
                         if(myid==value.userid){
                             return;
                         }
-                        axios.get('http://localhost:5001/getchatperson.php/?userid='+value.userid+"&&myid="+myid).then(res=>{
+                        axios.get(this.$url+'/getchatperson.php/?userid='+value.userid+"&&myid="+myid).then(res=>{
                       // console.log(res.data);
                       console.log(res.data)
                       if(typeof(res.data['chatid']) == "undefined"||res.data=="没有该用户"||typeof(res.data) == "undefined"){
@@ -137,7 +137,7 @@ export default {
                       var username = res.data['username'];
                       var flag = value.userid;
 
-                          axios.post('http://localhost:5001/chat.php',{userid:value.userid,myid:myid,chatmsg:chatmsg,usernum:usernum,myname:myname,username:username,userimg:piclist,flag:flag}).then(res=>{
+                          axios.post(this.$url+'/chat.php',{userid:value.userid,myid:myid,chatmsg:chatmsg,usernum:usernum,myname:myname,username:username,userimg:piclist,flag:flag}).then(res=>{
                    
                
                  
@@ -221,7 +221,7 @@ export default {
                       chatperson(){
                               var sessionid = JSON.parse(sessionStorage.getItem("vue-session-key"))['session-id']
          // console.log(sessionid)
-                      axios.post('http://localhost:5001/checksession.php',{sessionid:sessionid}).then(res=>{
+                      axios.post(this.$url+'/checksession.php',{sessionid:sessionid}).then(res=>{
                       
                         var myid = res.data['userid'];
                         var myname = res.data['username'];
@@ -230,7 +230,7 @@ export default {
                         if(myid==value.userid){
                             return;
                         }
-                        axios.get('http://localhost:5001/getchatperson.php/?userid='+value.userid+"&&myid="+myid).then(res=>{
+                        axios.get(this.$url+'/getchatperson.php/?userid='+value.userid+"&&myid="+myid).then(res=>{
                       // console.log(res.data);
                       console.log(res.data)
                       if(typeof(res.data['chatid']) == "undefined"||res.data=="没有该用户"||typeof(res.data) == "undefined"){
@@ -241,7 +241,7 @@ export default {
                       var username = res.data['username'];
                       var flag = value.userid;
 
-                          axios.post('http://localhost:5001/chat.php',{userid:value.userid,myid:myid,chatmsg:chatmsg,usernum:usernum,myname:myname,username:username,userimg:piclist,flag:flag}).then(res=>{
+                          axios.post(this.$url+'/chat.php',{userid:value.userid,myid:myid,chatmsg:chatmsg,usernum:usernum,myname:myname,username:username,userimg:piclist,flag:flag}).then(res=>{
                    
                
                  
@@ -302,7 +302,7 @@ export default {
  
              
            
-           return axios.get('http://localhost:5001/get.php/?'+idname+'='+id+"&&userid="+userid).then(res=>{
+           return axios.get(this.$url+'/get.php/?'+idname+'='+id+"&&userid="+userid).then(res=>{
              
                 return res.data;
              
