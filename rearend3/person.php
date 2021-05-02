@@ -2,7 +2,8 @@
 header('Access-Control-Allow-Origin:*');
 header('Access-Control-Allow-Methods:POST');//表示只允许POST请求
 header('Access-Control-Allow-Headers:x-requested-with, content-type');
-include "./mysql/newserivce.php";
+include "./mysql/serivce.php";
+include "./mysql/free.php";
 include "./mysql/function/mysql.php";
 $data = "";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -14,13 +15,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       $perjob = $data["perjob"];
       $peredc = $data["peredc"];
       $perbaseinfo['updatedate'] = date('Y-m-d H:i:s', time());
+       $getarray =array('person' =>$perbaseinfo ,'perjob' =>$perjob,'peredc' =>$peredc );
       if($perbaseinfo['method']=='update'){
-        
-        testupdateperson($perbaseinfo,$perjob,$peredc);
+        $free = new Free;
+        $free->setData($getarray);
+        $free->testupdateperson();
        
       }else if($perbaseinfo['method']=='add'){
-        
-        testaddperson($perbaseinfo,$perjob,$peredc);
+        $free = new Free;
+        $free->setData($getarray);
+        $free->testaddperson();
+        // testaddperson($perbaseinfo,$perjob,$peredc);
       }
       
   }

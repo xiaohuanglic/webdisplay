@@ -2,6 +2,9 @@
 header('Access-Control-Allow-Origin:*');
 header('Access-Control-Allow-Methods:POST');//表示只允许POST请求
 header('Access-Control-Allow-Headers:x-requested-with, content-type');
+include "./mysql/main.php";
+include "./mysql/detail.php";
+
 include "./mysql/newserivce.php";
 include "./mysql/function/mysql.php";
 $data = "";
@@ -11,12 +14,21 @@ $data = "";
 			$show=$_GET["personid"];
 			if(!empty($show)){
 				$userid =$_GET["userid"];
-				getdisplayData("person:personid:".$show,$userid);
+				$detail = new Detail;
+				$getarray = array('id' =>"person:personid:".$show,'userid' => $userid);
+				$detail->setData($getarray);
+				$detail->getDetialdisplayData();
+				// getdisplayData("person:personid:".$show,$userid);
 			}else{
 				$show=$_GET["taskid"];
 				if(!empty($show)){
 					$userid =$_GET["userid"];
-					getdisplayData("task:taskid:".$show,$userid);
+				
+				$detail = new Detail;
+				$getarray = array('id' =>"task:taskid:".$show,'userid' => $userid);
+				$detail->setData($getarray);
+				$detail->getDetialdisplayData();
+					// getdisplayData("task:taskid:".$show,$userid);
 				}else{
 					$show=$_GET["myid"];
 					$page = $_GET["page"];
@@ -45,10 +57,28 @@ $data = "";
 			
 		} else{
 			if($show=='Free'){
-				getBossData();
+				$experiencerequirement = $_GET["experiencerequirement"];
+				$education = $_GET["education"];
+				$salary = $_GET["salary"];
+				if(!empty($salary)||!empty($education)||!empty($experiencerequirement)){
+					// getBossDataCon($experiencerequirement,$education,$salary);
+					$main = new Main;
+					
+					$getarray = array('experiencerequirement' => $experiencerequirement,'education' => $education,'salary' => $salary );
+					$main->setData($getarray);
+					$main->getBossDataCon();
+				}else{
+					// getBossData();
+					$main = new Main;
+					$main->getBossData();	
+				}
+				
 			}
 			if($show=='Boss'){
-				getFreeData();
+				// getFreeData();
+				$main = new Main;
+
+				$main->getFreeData();
 			}
 			
 		

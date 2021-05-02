@@ -3,6 +3,7 @@ include "./function/mysql.php";
 include "./function/phonecode.php";
 include "./function/email.php";
 include "newserivce.php";
+class Resume{
 	function saveresume($data){
 		// 存储到数据库中
 		$getkey = getupdatekeys($data,['']);
@@ -54,4 +55,7 @@ include "newserivce.php";
 		});
 		
 	}
+
+}
+
 ?>

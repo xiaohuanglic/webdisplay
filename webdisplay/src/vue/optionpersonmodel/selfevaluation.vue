@@ -49,7 +49,7 @@ export default {
 }
 #selfevaluation{
  width: 80%;
-  margin-left: 20%;
+  /*margin-left: 20%;*/
   height: 150px;
   /*display:inline-block;*/
   /*padding: 0.375rem 0.75rem;*/

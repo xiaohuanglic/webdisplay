@@ -68,7 +68,30 @@
      
     </div>
     <div v-if="show=='Free'">
-      <table  border="1" cellspacing="0">
+    	<ul>
+    		<taskmodel v-on:experiencerequirement="experiencerequirement" v-on:education ="education" v-on:salary = "salary"></taskmodel>
+    	</ul>
+    	<ul class="mainli">
+    		
+    		<li v-for="(data,index) in disdata" v-if="index<datalength">
+    			<div  class="item-wrap" @click="jumpDeatail(data)"><div  class="left"><h3  class="pointer position-name text-ellipsis"><a  href="/job/26122" class="">
+										{{data['taskposition']}}
+									</a></h3> <div  class="info"><div  class="info-left"><span  class="info-span">
+											{{data['salary']}}
+										</span> <div  class="base"><span >
+												{{data['experiencerequirement']}}
+											</span> <div  class="el-divider el-divider--vertical"><!----></div> <span >
+												{{data['education']}}
+											</span> <div  class="el-divider el-divider--vertical"><!----></div> </div></div>
+										</div>
+										</div> <div  class="middle"><h3  title="data['taskname']" class="middle-span pointer"><a  href="/company/40522" class="">
+										{{data['taskname']}}
+									</a></h3> <p  style="display: flex; align-items: center; margin-bottom: 0px;"><div  aria-label="Breadcrumb" role="navigation" class="el-breadcrumb intriduty" style="font-size: 14px; line-height: 1;"><span  class="el-breadcrumb__item" aria-current="page"><span role="link" class="el-breadcrumb__inner">
+											
+										</span><span role="presentation" class="el-breadcrumb__separator"></span></span></div></p></div> <div  class="right-icon"><img :src="data['avatar']"></div></div>
+    		</li>
+    	</ul>
+     <!--  <table  border="1" cellspacing="0">
         <tr>
            <th v-for="(item, index) in tdhead">
             {{item}}
@@ -78,9 +101,9 @@
           <td>{{data['taskname']}}</td>
           <td>{{data['taskintro']}}</td>
           <td><a @click="jumpDeatail(data)">查看</a></td>
-         <!-- :href="'#/detail/?taskid=' + data['taskid'] +'&&userid='+data['userid']" -->
-        </tr>
-      </table>
+          :href="'#/detail/?taskid=' + data['taskid'] +'&&userid='+data['userid']" -->
+        <!-- </tr> -->
+      <!-- </table> --> 
     </div>
     </div>
     <div class="mainpagination">
@@ -100,13 +123,22 @@
 <script>
 import axios from "axios";
 import 'jquery';
+  import taskmodel from './taskmodel.vue'
  axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8'
 
 export default {
+		  components: {
+
+          taskmodel,
+        
+         
+          
+        },
   		data() {
   			return{
-          shownewmsg:false,
-          showmeg:[],
+  			getcindition:[],
+          	shownewmsg:false,
+          	showmeg:[],
           	datalength:"",
           	totalnum:"",
           	nowpage:1,
@@ -140,8 +172,7 @@ export default {
               for(var i =0;i<this.$common["time2"].length;i++){
                    clearInterval(this.$common["time2"][i]);
               }
-              // console.log(111111111111111)
-              // 进行定时;
+             
               var newmessage = this.$newmessage
               var common = this.$common
               var that = this
@@ -173,6 +204,85 @@ export default {
           
       },
   		methods:{
+  			getshowdata(){
+  					if(this.getcindition.length>0){
+  						var url = this.$url+'/get.php/?show='+this.show;
+  						for(var i =0;i<this.getcindition.length;i++){
+  							for(var key in this.getcindition[i]){
+  							url +='&&'+key+"="+this.getcindition[i][key];
+  						}
+  						}
+  						
+  							axios.get(url).then(res=>{
+  								console.log(res.data);
+              				this.extractData(res.data);
+           
+            			})
+
+  					}else{
+  							axios.get(this.$url+'/get.php/?show='+this.show).then(res=>{
+  								// console.log(res.data);
+              				this.extractData(res.data);
+           
+            			})
+
+  					}
+  				
+  				
+  				
+  			},
+  			judgeGetCondition(value){
+  				var j = 0;
+  				if(this.getcindition.length>0){
+  					for(var i =0;i<this.getcindition.length;i++){
+  						for(var key in this.getcindition[i]){
+  							console.log(this.getcindition[i])
+  							if(key==Object.keys(value)[0]){
+  							
+  								this.getcindition[i][key] = value[key];
+  							}else{
+  								j++;
+  							}
+  						}
+  						
+  					}
+
+  					if(j==this.getcindition.length){
+  						this.getcindition.push(value);
+  					}
+  				}else{
+  					this.getcindition.push(value)	
+  				}
+  			},
+  			experiencerequirement(value){
+  				// 先判断有没有这个key,有就修改没有就添加
+  				if(typeof(value)!='undefined'){
+  					this.judgeGetCondition({'experiencerequirement':value})
+  				this.getshowdata();
+  				}
+  				
+
+  				// 从后端拿数据
+  				
+  				
+  				
+  			},
+  			education(value){
+  				if(typeof(value)!='undefined'){
+  					this.judgeGetCondition({'education':value})
+  				
+  				this.getshowdata();
+  				}
+  				
+  			},
+  			salary(value){
+  				if(typeof(value)!='undefined'){
+  					this.judgeGetCondition({'salary':value})
+  				
+  					this.getshowdata();
+  				}
+  				
+  			},
       exit(){
           for(var each in this.$common){
               for(var i =0;i<this.$common[each].length;i++){
@@ -271,19 +381,14 @@ export default {
         },
   			showBoss(){
   				this.show='Boss'
-  					axios.get(this.$url+'/get.php/?show='+this.show).then(res=>{
-             
-             		 this.extractData(res.data);
-            	})
+  				this.getshowdata();
             
   			},
 
   			showfree(){
   				this.show='Free'
-  				axios.get(this.$url+'/get.php/?show='+this.show).then(res=>{
-              	this.extractData(res.data);
-           
-            	})
+  				this.getcindition=[];
+  				this.getshowdata();
           
 
   			},
@@ -326,13 +431,28 @@ export default {
             	// sessionStorage.setItem('page', index);
             	this.setIndex(index);
             	this.setShow(show);
-              
-              axios.get(this.$url+'/getpage.php/?page='+index+'&&totalnum='+this.totalnum+'&&size=2&&show='+show).then(res=>{
-               
+              if(this.getcindition.length>0){
+              		var url = this.$url+'/getpage.php/?page='+index+'&&totalnum='+this.totalnum+'&&size=2&&show='+show;
+  						for(var i =0;i<this.getcindition.length;i++){
+  							for(var key in this.getcindition[i]){
+  								url +='&&'+key+"="+this.getcindition[i][key];
+  							}
+  						}
+  						
+  							axios.get(url).then(res=>{
+  								console.log(res.data);
+              			this.extractpageData(res.data,index);
+           
+            			})
+              }else{
+              	axios.get(this.$url+'/getpage.php/?page='+index+'&&totalnum='+this.totalnum+'&&size=2&&show='+show).then(res=>{
+                  console.log(res.data)
                 this.extractpageData(res.data,index);
                 // console.log(res.data);
            
               })
+              }
+             
 
         },
         uppage(){
@@ -377,7 +497,12 @@ export default {
         extractData(data){
         
               this.jsondata(data);
+            
+             
+           
               this.totalnum = data[data.length-1]['COUNT(*)'];
+        	
+             
               this.disdata = data;
               this.datalength = data.length-1;
               this.nowpage = 1;
@@ -404,7 +529,10 @@ export default {
         // 导入一个js文件(公用方法)
         jsondata(data){
         	for(var i =0;i<data.length;i++){
-              	data[i] = JSON.parse(data[i]);
+        		if(typeof data[i] === 'string'){
+        			data[i] = JSON.parse(data[i]);
+        		}
+              	
             }
 
             return data;
@@ -473,6 +601,221 @@ export default {
 <style scoped>
 
 
+.item-wrap:after {
+    content: "";
+    position: absolute;
+    left: 1%;
+    bottom: 0;
+    height: 0.1rem;
+    width: 100%;
+    background: #eee;
+}
+.item-wrap .left{
+    width: 30%;
+}
+
+.item-wrap .left .info .info-left .info-span{
+    font-size: 1.5rem;
+    line-height: 1;
+    color: #ffab12;
+}
+.item-wrap .left .base{
+    align-self: center;
+    font-size: 0.8rem;
+    margin-left: 1%;
+    color: #666;
+    line-height: 1;
+}
+.item-wrap .left .base .el-divider {
+    margin: 0 4px;
+}
+.el-divider--vertical {
+    display: inline-block;
+    background-color: #ccc;
+    width: 1px;
+    height: 1em;
+    margin: 0 8px;
+    vertical-align: middle;
+    position: relative;
+}
+.el-divider--vertical:last-child {
+    display: inline-block;
+    background-color: #ccc;
+    width: 0;
+    height: 1em;
+    margin: 0 8px;
+    vertical-align: middle;
+    position: relative;
+}
+.item-wrap .middle .middle-span {
+    line-height: 21px;
+    margin-bottom: 18px;
+}
+.item-wrap .middle h3 {
+    font-size: 1.2rem;
+    font-weight: 400;
+    color: #333;
+    line-height: 1rem;
+}
+a, a:focus, a:hover {
+    cursor: pointer;
+    color: inherit;
+    text-decoration: none;
+}
+.mainli{
+	margin:0px;
+	padding: 0;
+}
+.item-wrap .right-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 5%;
+    height:5%;
+    border-radius: 0.2rem;
+    overflow: hidden;
+}
+.item-wrap .right-icon img {
+    width: 100%;
+    height: 100%;
+    border-radius: 0.2rem;
+    -o-object-fit: contain;
+    object-fit: contain;
+    border: 1px solid #eee;
+}
+@media only screen and (min-width: 767px){
+	.item-wrap{
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    padding: 5%;
+    font-size: 0.8rem;
+    overflow: hidden;
+    background: #fff;
+    border-top-left-radius: 0.1rem;
+    border-top-right-radius: 0.1rem;
+}
+.item-wrap .left .info{
+    display: flex;
+    justify-content: space-between;
+}
+.item-wrap .left .info .info-left{
+    display: flex;
+    align-items: center;
+}
+
+}
+@media only screen and (min-width: 480px) and (max-width: 767px){
+.item-wrap{
+    position: relative;
+    /*display: flex;*/
+    /*justify-content: space-between;*/
+    padding: 5%;
+    font-size: 0.8rem;
+    overflow: hidden;
+    background: #fff;
+    border-top-left-radius: 0.1rem;
+    border-top-right-radius: 0.1rem;
+}
+.item-wrap .left{
+    width: 100%;
+
+}
+.item-wrap .left h3{
+    text-align: center;
+
+}
+.item-wrap .left .info{
+  
+   text-align: center;
+
+}
+
+.item-wrap .left .info .info-left .base{
+   margin-top: 0.5rem;
+}
+.item-wrap .middle  {
+	float: left;
+	margin-top: 1rem;
+	margin-left: 25%;
+	margin-right: 1rem;
+   text-align: center;
+}
+.item-wrap .right-icon {
+   float: left;
+    justify-content: center;
+    align-items: center;
+    width: 30%;
+    height:30%;
+    border-radius: 0.2rem;
+    overflow: hidden;
+}
+.item-wrap .right-icon img {
+    width: 100%;
+    height: 100%;
+    border-radius: 0.2rem;
+    -o-object-fit: contain;
+    object-fit: contain;
+    border: 1px solid #eee;
+}
+
+}
+/* 小于479px */
+@media only screen and (max-width: 479px){
+	.item-wrap{
+    position: relative;
+    /*display: flex;*/
+    /*justify-content: space-between;*/
+    padding: 5%;
+    font-size: 0.8rem;
+    overflow: hidden;
+    background: #fff;
+    border-top-left-radius: 0.1rem;
+    border-top-right-radius: 0.1rem;
+}
+.item-wrap .left{
+    width: 100%;
+
+}
+.item-wrap .left h3{
+    text-align: center;
+
+}
+.item-wrap .left .info{
+  
+   text-align: center;
+
+}
+
+.item-wrap .left .info .info-left .base{
+   margin-top: 0.5rem;
+}
+.item-wrap .middle  {
+	float: left;
+	margin-top: 1rem;
+	margin-left: 25%;
+	margin-right: 1rem;
+   text-align: center;
+}
+.item-wrap .right-icon {
+   float: left;
+    justify-content: center;
+    align-items: center;
+    width: 30%;
+    height:30%;
+    border-radius: 0.2rem;
+    overflow: hidden;
+}
+.item-wrap .right-icon img {
+    width: 100%;
+    height: 100%;
+    border-radius: 0.2rem;
+    -o-object-fit: contain;
+    object-fit: contain;
+    border: 1px solid #eee;
+}
+	
+}
  .main{
   width: 80%;
   height: 1000px;

@@ -303,7 +303,7 @@ export default {
              
            
            return axios.get(this.$url+'/get.php/?'+idname+'='+id+"&&userid="+userid).then(res=>{
-             
+             	// console.log(res.data);
                 return res.data;
              
               })

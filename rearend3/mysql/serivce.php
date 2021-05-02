@@ -196,21 +196,67 @@ function Publishproject($project){
 
 
 // 可以合并为一个函数
-function getBossData(){
 
-
-	getTableData("*","task",[0,2]);
-	
+function getnewkey($key,$array){
+	$newkey = [];
+	$i=0;
+	for($j = 0;$j<sizeof($array);$j++){
+		if(!empty($array[$j])){
+			$newkey[$i] = $key[$j];
+			
+			$i++;
+		}
+	}
+	return $newkey;
 
 }
-
-function getFreeData(){
-
-
-	getTableData("*","person",[0,2]);
-	
-
+function getnewvalue($key,$array){
+	$newarray = [];
+	$i=0;
+	for($j = 0;$j<sizeof($array);$j++){
+		if(!empty($array[$j])){
+			
+			$newarray[$i] = "'".$array[$j]."'";
+			$i++;
+		}
+	}
+	return $newarray;
 }
+
+function getTableBossDataCon($table,$newkey,$newarray,$num){
+	$totalnum = getBossDataConNum($table,$newkey,$newarray);
+	$getBossDataConData =  getBossDataConData($table,$newkey,$newarray,$num);
+	$getBossDataConData[sizeof($getBossDataConData)] = $totalnum;
+	echo json_encode($getBossDataConData);
+}
+function getBossDataConNum($table,$newkey,$newarray){
+	// SelectLimitcontest(["*"],'task',$newkey,$newarray,[0,2],function($result){
+	// 	echo "test";
+	// });
+	$totalnum = SelectNum($table,$newkey,$newarray,function($result){
+	// 	echo "test";
+		while($row = $result->fetch_assoc()) {
+				return $row;
+  			 	
+    		}
+	});
+
+	return $totalnum;
+}
+function getBossDataConData($table,$newkey,$newarray,$num){
+	return SelectLimitcon(["*"],$table,$newkey,$newarray,$num,function($result){
+		$array = [];
+		$a = 0;
+		while($row = $result->fetch_assoc()) {
+			$array[$a] = $row;		
+  			$a++;
+    	}
+
+    	return $array;
+	});
+	
+}
+
 
 
 
@@ -456,35 +502,7 @@ function checkchatmsg($data){
 	});
 	
 	
-	// if($getchatid=="没有数据"){
-	// 	$a = 0;
-	// 	foreach ($data as $key => $value) {
-			
-	// 		if($key=='userid'){
-	// 			$chat[$a] = $key;
-	// 			$chatname[$a] ="'".$data["myid"]."'";
-						
-	// 		}else if($key=='myid'){
-	// 			$chat[$a] = $key;
-	// 			$chatname[$a] ="'".$data["userid"]."'";
-	// 		}
-	// 		$a++;
-	// 	}
-
-	// 	$getchatid = Select(array('chatmsg','chatid','usernum','mynum'),'chat',$chat,$chatname,function($result){
-	// 		while($row = $result->fetch_assoc()) {
-	// 			return $row;
-  			 	
- //    		}
-	// 	});
-		
-	// 	if($getchatid=="没有数据"){
-	// 		echo $getchatid;
-	// 		return;
-	// 	}
 	
-		
-	// }
 	if($getchatid['usernum']!=0){
 		UpdateData('chat',["usernum"],[0],["chatid"],["'".$getchatid['chatid']."'"]);
 	}else if($getchatid['mynum']!=0){
@@ -713,88 +731,7 @@ function addchatmsg($data){
 		echo $chatid.','.$data['username'].','.$data['userid'].','.$data['usernum'].','.'http://'.$_SERVER['HTTP_HOST'].$subpath;
 
 	}
-	// else{
-	// 	// echo $chatid;
-	// 	// 更新数据
-	// 	$imgpath = "./chat/".$getchatid['chatid'];
-	// 	 $saveimgpath = "";
-	// 	 if (!is_dir($imgpath.'/userimg')) {
- //  // dir doesn't exist, make it
- //  			mkdir($imgpath.'/userimg',0777,true);
-	// 	}
-	// 	 if(!empty($data['userimg'])){
-	// 	 	for ($i=0; $i < sizeof($data['userimg']); $i++) {
-	// 	 		$imgid = $i.md5(uniqid(mt_rand(), true)); 
-	// 	 		file_put_contents($imgpath.'/userimg/'.$imgid.'.jpg',file_get_contents($data['userimg'][$i]['imgsrc']));
-	// 	 		$saveimgpath.='http://'.$_SERVER['HTTP_HOST'].substr($imgpath,1).'/userimg/'.$imgid.'.jpg'.",";
 
-	// 	 	}
-		 	
-		 	
-	// 	 }else{
-	// 	 	$saveimgpath.=',';
-	// 	 }
-	// 	 if(!empty($data['userfile'])){
-	// 			$urllist= explode(",", $data['userfile'][0]);
-	// 			for ($i=0; $i < count($urllist); $i++) { 
-	// 				rename("./tmp/".$urllist[$i],$imgpath.'/userfile/'.$urllist[$i]);
-	// 				$savefilepath.='http://'.$_SERVER['HTTP_HOST'].substr($imgpath,1).'/userfile/'.$urllist[$i].","; 			
-	// 			}
-					
-	// 	}else{
-	// 		$savefilepath.=",";
-	// 	}
-
-	// 	$path = "./chat/".$getchatid['chatid']."/".$getchatid['chatid'].".php";
-	// 	$subpath = substr($path,1,mb_strlen($path,'utf8'));
-	// 	$name = '';
-	// 	$arr = array('context' => $data['chatmsg'], 'imgpath' =>$saveimgpath, 'filepath' => $savefilepath);
-	// 	if(file_exists($path)){
- //        	$myfile = fopen($path, "a") or die("Unable to open file!");
-	// 		$htmldata = "echo '".json_encode($arr).",-';";
-	// 		fwrite($myfile, $htmldata);
-	// 		fclose($path);
- //    	}else{
- //        	$myfile = fopen($path, "w") or die("Unable to open file!");
-	// 		$htmldata = "<?php
-	// 			header('Access-Control-Allow-Origin:*');
-	// 			header('Access-Control-Allow-Methods:POST');//表示只允许POST请求
-	// 			header('Access-Control-Allow-Headers:x-requested-with, content-type'); 
-	// 			echo '".json_encode($arr).",-';";
-	// 		fwrite($myfile, $htmldata);
-	// 		fclose($path);
- //    	}
-		
-		
-	// 	// 根据myid实在userid里面，还是myid里面
-	// 	// 如果是在userid里面，usernum+1;mynum = 0;
-	// 	// 如果是在myid里面，munum+1;usernum = 0;
-
-	// 	$nameid = Select(array('usernum','userid','myid','mynum'),'chat',array('chatid'),array("'".$getchatid['chatid']."'"),
-	// 	function($result){
-				
-	// 		return $result;
-	// 	});
-	// 	while($row = $nameid->fetch_assoc()) {
-
-	// 			if($row['userid']==$data["flag"]){
-	// 				$usernum = (int)$row['usernum']+1;
-	// 				$getchatid['usernum'] =  $usernum;
-					
-
-	// 			}else if($row['myid']==$data["flag"]){
-	// 				$mynum = (int)$row['mynum']+1;
-	// 				$getchatid['mynum'] =  $mynum;
-					
-	// 			}
- //    	}
-
-	// 	// 要优化一下才行
-	// 	 UpdateData('chat',["usernum","mynum","userimg","userfile"],["'".$getchatid['usernum']."'","'".$getchatid['mynum']."'","'".$saveimgpath."'","'".$savefilepath."'"],["chatid"],["'".$getchatid['chatid']."'"]);
-		
-		
-	// 	echo $getchatid['chatid'].','.'http://'.$_SERVER['HTTP_HOST'].$subpath;
-	// }
 
 	
 	
@@ -1370,15 +1307,7 @@ function getpersontable($data){
 	
 	
 }
-function getpersontablenum($userid,$flag,$show){
 
-	if($show=='Boss'){
-		getTableDatacon("*","person",['userid'],["'".$userid."'"],[0,2]);
-	}else{
-		getTableDatacon("*","task",['userid'],["'".$userid."'"],[0,2]);
-	}
-	
-}
 function SendephoneCode($phone){
 	// 1.得到手机号
 	// 2.自动生成验证码
@@ -1388,74 +1317,9 @@ function SendephoneCode($phone){
 	// sendphonecode('15118747494','1234');
 	// sendphonecode('15118747494','1245');
 }
-function getJumpPage($table,$show,$totalnum,$n){
-	// 显示的条数n
-	// 得到的初始数据为($show-1)*n
-	// 得到的终条数为(($show-1)*n)+(n-1)
-	// 得到的终条数要进行判断（($show-1)*n)+(n-1)是否大于总条数
-	// 如果大于则终条数显示为总条数
-	$strat = ($show-1)*$n;
-	$end = (($show-1)*$n)+($n-1);
-	if($end>($totalnum-1)){
-		$end = $totalnum-1;
-	}
-	// 如果$table为Boss,表为person
-	// 反而为表为task
 
-	if($table=="Boss"){
-		$flagtable = "person";
-	}else{
-		$flagtable = "task";
-	}
-	// if($strat==0){
-	// 	$end = $end+1;
-	// }
-	if($strat!=$end){
-		// $limit = ($strat,$end);
-		// 提取方法;
-		chatPageLimit('*',$flagtable,[$strat,2]);
-	
-	}else{
-		// 进行单条数据提取;
-		chatPageLimit('*',$flagtable,[$strat,1]);
-	}
-	// echo $strat." ".$end;
-}
-function getJumpPagecon($table,$show,$totalnum,$n,$userid){
-	// 显示的条数n
-	// 得到的初始数据为($show-1)*n
-	// 得到的终条数为(($show-1)*n)+(n-1)
-	// 得到的终条数要进行判断（($show-1)*n)+(n-1)是否大于总条数
-	// 如果大于则终条数显示为总条数
-	;
-	$strat = ($show-1)*$n;
-	$end = (($show-1)*$n)+($n-1);
-	if($end>($totalnum-1)){
-		$end = $totalnum-1;
-	}
-	// 如果$table为Boss,表为person
-	// 反而为表为task
 
-	if($table=="Boss"){
-		$flagtable = "person";
-	}else{
-		$flagtable = "task";
-	}
-	// if($strat==0){
-	// 	$end = $end+1;
-	// }
 
-	if($strat!=$end){
-		// $limit = ($strat,$end);
-		// 提取方法;
-		chatPageLimitCon('*',$flagtable,['userid'],["'".$userid."'"],[$strat,2]);
-	
-	}else{
-		// 进行单条数据提取;
-		chatPageLimitCon('*',$flagtable,['userid'],["'".$userid."'"],[$strat,1]);
-	}
-	// echo $strat." ".$end;
-}
 function chatPageLimit($data,$table,$condition){
 
 	$limitdata = getTableLimitData($data,$table,$condition);
@@ -1551,21 +1415,7 @@ function getTableLimitData($data,$table,$condition){
 
 	return $totaldata;
 }
-// function getTableLimitDatacon($array,$table,$condition,$data){
-// 	$totaldata = SelectLimit($data,$table,$condition,function($result){
-// 				$i = 0;
-// 				$a = [];
-// 				while($row = $result->fetch_assoc()) {
-// 					$a[$i] = json_encode($row);
-// 					$i++;
-					
-//     			}
-//     			return $a;
-		
-// 		});
 
-// 	return $totaldata;
-// }
 function getchatperson($myid,$page,$totalnum,$displaynum){
 	// 先显示10个
 	if(($totalnum%$displaynum)!=0){
@@ -1597,44 +1447,7 @@ function getchatperson($myid,$page,$totalnum,$displaynum){
 
 	
 }
-// function getchatuserperson($userid,$page,$totalnum,$displaynum){
-// 	if(($totalnum%$displaynum)!=0){
-// 		if($page==(floor($totalnum/$displaynum)+1)){
-// 			$page = floor($totalnum%$displaynum);	
-// 		}else{
-// 			$page = ($page-1)*1;
-// 		}
-// 	}else{
-// 		$page = ($page-1)*1;
-// 	}
-// 	$conperson = SelectLimitcon(["myid","mynum"],'chat',['userid'],["'".$userid."'"],[$page,$displaynum],function($result){
-		
-//     			return $result;
-    			
-// 		});
 
-// 	if(!empty($conperson)){
-// 		if($conperson!="没有数据"){
-// 			$usernames = [];
-// 			$i = 0;
-// 			while($row = $conperson->fetch_assoc()) {
-// 				// 拿到userid,去查询名字，进行添加
-// 				$myname = getusername($row['myid']);
-// 				// array("a"=>"red","b"=>"green")
-// 				$array = array('id'=>$row['myid'],"username"=>$myname,"mynum"=>$row['mynum']);
-// 				$usernames[$i] =$array;
-// 				$i++;
-//     		}
-//     		echo json_encode($usernames);
-// 		}else if($conperson=="没有数据"){
-// 			echo "没有数据";
-// 		}
-		
-// 	}else{
-// 		echo "没有数据";
-// 	}
-
-// }
 function getaddchatperson($userid,$myid){
 	// 查看数据，有则显示该名字，没有就添加名字
 	// 先判断有没有chatid
@@ -1705,46 +1518,7 @@ function getUserid($show){
   			echo json_encode($array);	
     	});
 	// 得到userid ,根据userid更新chat的username
-	// $id = Select(array('id'),'user',array('username'),array("'".$show."'"),
-	// 	function($result){
-				
-	// 		return $result;
-	// 	});
-	// while($row = $id->fetch_assoc()) {
-	// 		// $a[$i] = $row["username"];
-	// 		// $i++;	
-	// 			$userid = $row["id"];
- //    	}
-  //  	Selecttest(array('userid',""),'chat',array('chatid'),array("'".$show."'"),
-		// function($result){
-				
-		// 	return $result;
-		// });
-
-  //  	if($getuserid=="没有数据"){
-  //  		$getmyid = Select(array('myid'),'chat',array('myid'),array("'".$userid."'"),
-		// function($result){
-				
-		// 	return $result;
-		// });
-
-		// if($getmyid!="没有数据"){
-		// 	while($row = $getmyid->fetch_assoc()) {
-		// 		UpdateData('chat',["myname"],["'".$show."'"],["myid"],["'".$userid."'"]);
-		// 		$array=array("myid"=>$row["myid"]);
-		// 		// echo $row["myid"];
-		// 		echo json_encode($array);
-		// 		return;
-  //   		}
-		// }
-  //  	}else{
-  //  		while($row = $getuserid->fetch_assoc()) {
-		// 		UpdateData('chat',["username"],["'".$show."'"],["userid"],["'".$userid."'"]);
-		// 		$array=array("userid"=>$row["userid"]);
-		// 		echo json_encode($array);
-		// 		return;
-  //   	}
-  //  	}
+	
 
 
 }
@@ -1752,23 +1526,7 @@ function getUserid($show){
 function getotalchatnum($myid){
 	// 得到userid ,根据userid更新chat的username
 
-	// $conperson = Select(['COUNT(*)'],'chat',['myid'],["'".$myid."'"],function($result){
 
- //    		return $result;
-    			
-	// });
-	// Selectmorecon(['myid','userid'],'chat',['myid','userid'],["'".$myid."'","'".$myid."'"],function($result){
-	// 		$array = [];
-	// 		$a = 0;
-	// 		while($row = $result->fetch_assoc()) {
-	// 			$array[$a] = array('userid'=>$row['userid'],'myid'=>$row['myid']);
-
-	// 			$a++;
-				 
- //    		}
- //    		echo json_encode($array);
-    			
-	// });
 	Selectmorecon(['*'],'chat',['myid','userid'],["'".$myid."'","'".$myid."'"],function($result){
 				$array = [];
 			$a = 0;
@@ -1826,11 +1584,71 @@ function getaddtotalchatnum($userid){
 		echo "没有数据";
 	}
 }
+function getdisplayData($id,$userid){
+	$array=[];
+	
+	$find = explode(":", $id);
+	if($find[0]=="person"){
+		$array =["*"];
+	$table = [$find[0],"peredc","perjob"];
 
-// Sendemail('1');
-// SelectAll('User');
-// Select(array('id','username'),'User',array('id'),array('1'));
-// Adddata('User',['id','username',"password"],["2","'xiaohaungli'","12356"]);
-// DeleteData('User',["id"],["3"]);
-// UpdateData('User',["username","password"],["'dahuang'","'123456aa'"],["id"],["2"]);
+	$condition =[$find[0].'.'.$find[1]];
+	$data = ["'".$find[2]."'"];
+	$condition1 =["person.personid","person.personid" ]; 
+	$data1 = ["peredc.personid","perjob.personid"];
+	$getarray = Selectleftjiontable($array,$table,$condition1,$data1,$condition,$data,function($result){
+				$i = 0;
+				while($row = $result->fetch_assoc()) {
+					// var_dump($row);
+					$array[$i] = $row;
+					$i++;
+					// echo json_encode($row);
+
+    			}
+    			$i=0;
+    			return $array;
+		
+		});
+
+	$sendarray = [];
+	$firstunequeal = ["peredcid","perjobid","edustrattime","eduendtime","edcschool","edcdescription","workstrattime","workendtime","workposition","workcompany","workdescription"];
+	$getkeys = getupdatekeys($getarray[0],$firstunequeal);
+	foreach ($getarray[0] as $key => $value) {
+		for($i = 0;$i<sizeof($getkeys);$i++){
+			if($key==$getkeys[$i]){
+				$sendarray[$key] = $value;
+			}
+		}
+		# code...
+	}
+	$equealdata = ["peredcid","edustrattime","eduendtime","edcschool","edcdescription"];
+	$thirdequealdata = ["perjobid","workstrattime","workendtime","workposition","workcompany","workdescription"];
+	// peredcid
+	$secondunequeal = getsendarray($equealdata,'peredcid',$getarray);
+	$thirdunequeal = getsendarray($thirdequealdata,'perjobid',$getarray);
+	// var_dump($secondunequeal);
+	$sendarray['edc'] = $secondunequeal;
+	$sendarray['job'] = $thirdunequeal;
+	$sendarray['personid'] = $find[2];
+	$sendarray['userid'] = $userid;
+	echo json_encode($sendarray);
+
+	}else if($find[0]=="task"){
+		
+		// Selecttest($array,$table,$condition,$data,$callback)
+		Select(['*'],'task',['taskid'],["'".$find[2]."'"],function($result){
+			while($row = $result->fetch_assoc()) {
+					// var_dump($row);
+					
+					echo json_encode($row);
+
+    			}
+		});
+		// var_dump($find);
+	}
+	
+
+}
+
+
 ?>

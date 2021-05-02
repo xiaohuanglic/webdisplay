@@ -2,7 +2,7 @@
 // include "./function/mysql.php";
 // include "./function/phonecode.php";
 // include "./function/email.php";
-include "serivce.php";
+// include "serivce.php";
 function newPushpersonalinfo($person){
 	if(empty($person)){
 		return '没有数据输入';
@@ -135,71 +135,7 @@ function saveimgpath($person){
 		return [$avatarpath,$addimgpath];
 
 }
-function getdisplayData($id,$userid){
-	$array=[];
-	
-	$find = explode(":", $id);
-	if($find[0]=="person"){
-		$array =["*"];
-	$table = [$find[0],"peredc","perjob"];
 
-	$condition =[$find[0].'.'.$find[1]];
-	$data = ["'".$find[2]."'"];
-	$condition1 =["person.personid","person.personid" ]; 
-	$data1 = ["peredc.personid","perjob.personid"];
-	$getarray = Selectleftjiontable($array,$table,$condition1,$data1,$condition,$data,function($result){
-				$i = 0;
-				while($row = $result->fetch_assoc()) {
-					// var_dump($row);
-					$array[$i] = $row;
-					$i++;
-					// echo json_encode($row);
-
-    			}
-    			$i=0;
-    			return $array;
-		
-		});
-
-	$sendarray = [];
-	$firstunequeal = ["peredcid","perjobid","edustrattime","eduendtime","edcschool","edcdescription","workstrattime","workendtime","workposition","workcompany","workdescription"];
-	$getkeys = getupdatekeys($getarray[0],$firstunequeal);
-	foreach ($getarray[0] as $key => $value) {
-		for($i = 0;$i<sizeof($getkeys);$i++){
-			if($key==$getkeys[$i]){
-				$sendarray[$key] = $value;
-			}
-		}
-		# code...
-	}
-	$equealdata = ["peredcid","edustrattime","eduendtime","edcschool","edcdescription"];
-	$thirdequealdata = ["perjobid","workstrattime","workendtime","workposition","workcompany","workdescription"];
-	// peredcid
-	$secondunequeal = getsendarray($equealdata,'peredcid',$getarray);
-	$thirdunequeal = getsendarray($thirdequealdata,'perjobid',$getarray);
-	// var_dump($secondunequeal);
-	$sendarray['edc'] = $secondunequeal;
-	$sendarray['job'] = $thirdunequeal;
-	$sendarray['personid'] = $find[2];
-	$sendarray['userid'] = $userid;
-	echo json_encode($sendarray);
-
-	}else if($find[0]=="task"){
-		
-		// Selecttest($array,$table,$condition,$data,$callback)
-		Select(['*'],'task',['taskid'],["'".$find[2]."'"],function($result){
-			while($row = $result->fetch_assoc()) {
-					// var_dump($row);
-					
-					echo json_encode($row);
-
-    			}
-		});
-		// var_dump($find);
-	}
-	
-
-}
 
 function getsendarray($equealdata,$equealid,$getarray){
 	$secondequeal = $equealdata;
@@ -577,28 +513,28 @@ function getupdatevalue($per,$keydata){
 	return $array;
 
 }
-function testaddperson($person,$perjob,$peredc){
-	newPushpersonalinfo($person);
-	addpersonwork($person,$perjob);
-	addpersondec($person,$peredc);
-}
+// function testaddperson($person,$perjob,$peredc){
+// 	newPushpersonalinfo($person);
+// 	addpersonwork($person,$perjob);
+// 	addpersondec($person,$peredc);
+// }
 
-function testupdateperson($data,$perjob,$peredc){
-	updatepersonwork($data,$perjob,'perjob');
-	updatepersondec($data,$peredc,'peredc');
-	newUpdatepersoninfo($data);
+// function testupdateperson($data,$perjob,$peredc){
+// 	updatepersonwork($data,$perjob,'perjob');
+// 	updatepersondec($data,$peredc,'peredc');
+// 	newUpdatepersoninfo($data);
 	
 	
-}
-function testaddtask($task){
+// }
+// function testaddtask($task){
 	
-	newPushtaskinfo($task);
-}
+// 	newPushtaskinfo($task);
+// }
 
-function testupdatetask($task){
+// function testupdatetask($task){
 	
 
-	newUpdatetaskinfo($task);
+// 	newUpdatetaskinfo($task);
 	
-}
+// }
 ?>

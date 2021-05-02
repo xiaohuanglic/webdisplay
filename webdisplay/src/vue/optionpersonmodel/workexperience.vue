@@ -409,7 +409,7 @@ export default {
   padding-top: 10px;
   padding-bottom: 10px;
   margin-top:20px;
-  margin-left: 20%
+  
 }
 #workexperience .form-control{
   width: 60%;

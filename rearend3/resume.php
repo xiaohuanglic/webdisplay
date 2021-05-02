@@ -15,11 +15,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $GLOBALS['data'] = json_decode($resume, true);
     if(!empty($GLOBALS['data']['resume']['personid'])&&!empty($GLOBALS['data']['resume']['taskid'])){
   		$GLOBALS['data']['resume']['resumeid'] = 'resume'.md5(uniqid(mt_rand(), true));
-   		saveresume( $GLOBALS['data']['resume']);
+      $resume = new Resume();
+      $resume->saveresume( $GLOBALS['data']['resume']);
+   		
   	}else if(empty($GLOBALS['data']['resume']['personid'])&&!empty($GLOBALS['data']['resume']['taskid'])){
   	
-  		checkpersonid($GLOBALS['data']['resume']['taskid']);
-
+  		
+        $resume = new Resume();
+      $resume->checkpersonid($GLOBALS['data']['resume']['taskid']);
   	}
   
   }

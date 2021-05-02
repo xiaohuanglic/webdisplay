@@ -446,8 +446,8 @@
                 
                  axios.post(url+'/person.php',{perbaseinfo:perbaseinfo,perjob:perjob,peredc:peredc}).then(res=>{
 
-                    console.log("添加成功")
-                    // console.log(res.data);
+                   
+                    console.log(res.data);
                               
 
                 })

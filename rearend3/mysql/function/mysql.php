@@ -7,7 +7,7 @@ $db = "newfreelancedisplay";
 // 创建连接
 
 $conn = mysqli_connect($servername, $username, $password,$db);
- 
+
 // 检测连接
 if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
@@ -138,8 +138,9 @@ function selectdata($condition,$data){
     $string2 = $string2.$condition[$i]."=".$data[$i]."AND ";
    
   }
-  return substr($string2,0,mb_strlen($string2,"utf8")-4);
-
+   $index = strripos($string2,"AND");
+  // return substr($string2,0,mb_strlen($string2,"utf8")-4);
+  return  substr($string2,0,$index);
 
 }
 function moreselectdata($condition,$data){
@@ -283,6 +284,16 @@ function SelectLimitcon($array,$table,$condition,$data,$num,$callback){
 
   return Getdata($sql,$conn,$callback);
 }
+function SelectLimitcontest($array,$table,$condition,$data,$num,$callback){
+  global $conn;
+  $string2 = "";
+  $str1 = datafor($array);
+  $str2 = selectdata($condition,$data);
+  $str3 = limitdata($num);
+  $sql = "SELECT ".$str1." "."FROM ".$table." WHERE ".$str2." LIMIT ".$str3;
+  echo $sql;
+  // return Getdata($sql,$conn,$callback);
+}
 function Selectmorelimitcon($array,$table,$condition,$data,$num,$callback){
   global $conn;
   $string2 = "";
@@ -338,16 +349,7 @@ function Selectleftjiontabletest($array,$table,$condition1,$data1,$condition,$da
    echo $sql;
    // return Getdata($sql,$conn,$callback);
 }
-function SelectLimitcontest($array,$table,$condition,$data,$num,$callback){
-  global $conn;
-  $string2 = "";
-  $str1 = datafor($array);
-  $str2 = selectdata($condition,$data);
-  $str3 = limitdata($num);
-  $sql = "SELECT ".$str1." "."FROM ".$table." WHERE ".$str2." LIMIT ".$str3;
-  echo $sql;
-  // return Getdata($sql,$conn,$callback);
-}  
+
 
 function Adddata($table,$condition,$data){
   global $conn;
