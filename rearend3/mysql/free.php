@@ -1,6 +1,10 @@
 <?php
 // include "serivce.php";
-include_once "newserivce.php";
+
+//  header('Access-Control-Allow-Origin:*');
+// header("Access-Control-Allow-Credentials:true");
+// header("Access-Control-Allow-Methods:OPTION, POST, GET");
+// header("Access-Control-Allow-Headers X-Requested-With, Content-Type");
 class Free{
 	private $person;
 	private $perjob;
@@ -65,7 +69,7 @@ class Free{
 	}
 	public function testaddperson(){
 		newPushpersonalinfo($this->person);
-		addpersonwork($this->person,$this->person);
+		addpersonwork($this->person,$this->perjob);
 		addpersondec($this->person,$this->peredc);
 	}
 

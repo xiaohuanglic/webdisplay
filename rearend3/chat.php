@@ -1,8 +1,9 @@
 <?php
 header('Access-Control-Allow-Origin:*');
-header('Access-Control-Allow-Methods:POST');//表示只允许POST请求
+header('Access-Control-Allow-Methods:POST, GET, OPTIONS');//表示只允许POST请求
 header('Access-Control-Allow-Headers:x-requested-with, content-type');
 include "./mysql/serivce.php";
+include "./mysql/chat.php";
 include "./mysql/function/mysql.php";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 //   // collect value of input field
@@ -10,7 +11,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   // $data = json_decode($data, true);
   	if(!empty($data)){
   		if(empty(json_decode($data, true))){
-  			savefile($data);
+         $chat = new Chat();
+          $chat->savefile($data);
+  			
         // var_dump($data);
   		}else{
   			$data = json_decode($data, true);
@@ -19,8 +22,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   
     
      
-         
-          addchatmsg($data);
+          $chat = new Chat();
+          $chat->addchatmsg($data);
+          // 
           // 添加名单
           
         
@@ -28,15 +32,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
           
   		
   			if(empty($data['chatmsg'])){
-         
-            checkchatmsg($data);
+             $chat = new Chat();
+            $chat->checkchatmsg($data);
+            
           
     
      
         }else if (!empty($data['chatmsg'])) {
           // 添加内容
-
-          savechatmsg($data);
+           $chat = new Chat();
+            $chat-> savechatmsg($data);
+         
           
         }
          

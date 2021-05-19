@@ -411,10 +411,11 @@
                 // console.log("");
                 return false;
             }
-            console.log(this.$url)
+           
             this.ajax(this.$url+'/login.php','post',{password:this.password,username:this.username},{headers:{"Content-Type" : "application/json"}},(res) => {
                  if(typeof res.data != "undefined" && res.data != null && res.data != ""){
                  var arr=res.data.split(",");
+                 console.log(res.data);
                  // console.log(arr[0])
                 if(arr[0]=="请去激活邮箱"){
                  this.todosList=this.email
@@ -430,10 +431,17 @@
                       // 存储到服务器上，要拿根据sessionid去拿
                       // session.set('username', arr);
                        this.ajax(this.$url+'/session.php','post',{session:sessonjson},{headers:{"Content-Type" : "application/json"}},(res) => {
-                // console.log(res.data)
+              
                             console.log(res.data);
+                            
+                            
                       })
-                      this.$router.push({path: '/main'})
+                       if(sessonjson['username']=='admin'){
+                             this.$router.push({path: '/test'})
+                       }else if(sessonjson['username']!='admin'){
+                           this.$router.push({path: '/main'})
+                       }
+                     
                    
                     
                   }

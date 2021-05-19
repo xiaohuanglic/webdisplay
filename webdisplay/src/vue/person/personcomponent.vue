@@ -7,7 +7,8 @@
       <td class="psersonimg"><img :src='data["avatar"]'></td>
       <td>{{data["personname"]}}</td>
       <td @click=getview(data)>查看</td>
-      <td v-if="resumeselect" @click="getchoose(data)">选择</td>
+       <td v-if="!resumeselect" @click="getdelete(data)" >删除</td>
+      <td v-if="resumeselect" @click="getchoose(data)" >选择</td>
      <!--  <td @click=Getupdate(1,data)>修改</td><td @click=Getupdate(2,data)>删除</td> -->
       </tr></table>
     </div>
@@ -28,6 +29,7 @@
   import axios from "axios";
 
    import pagination from '../pagination.vue'
+
    import display1 from '../dispalymodel/choosedisplay/display1.vue'
   import display3 from '../dispalymodel/choosedisplay/display3.vue'
    import mdisplay1 from '../mobile/mdispalymodel/mchoosedisplay/mdisplay1.vue'
@@ -57,15 +59,16 @@ import url from "../../js/totalurl.js";
             displaydata:{},
             personflag:"",
             resumeselect:true,
-            mobileflag:""
+            mobileflag:"",
+           
        
         // context: null
       }
     },
     mounted(){
                 
-                
                   
+                  // console.log(this.persondata)
                   if(this.persondata!==null&&typeof(this.persondata) != "undefined"&&this.persondata.length>0){
                       this.$refs.pagination.pagename = "getdatapagetabele"
                   this.$refs.pagination.showname = "getdatashowtabele"
@@ -74,12 +77,26 @@ import url from "../../js/totalurl.js";
                   this.personflag="resumeperson";
                   this.distance = 1;
                   this.resumeselect = false
-                   this.getpersondata(this.persondata)
+                  var resume={};
+                  resume['taskid'] = this.persondata
+                   
+                  axios.post(this.$url+'/resume.php',{resume:resume}).then(res=>{ 
+                       if(res.data!==null&&typeof(res.data) != "undefined"&&res.data.length>0){
+                             this.getpersondata(res.data);
+                             // console.log(res.data)
+                            
+                            
+                            
+                       }
+                   
+                    })
                   }else{
                       this.$refs.pagination.pagename = "resumepagetabele"
                   this.$refs.pagination.showname = "resumeshowtabele"
                   this.$refs.pagination.totalnumname = "resumetotalnumtable"
                   this.$refs.pagination.totalpagename = "resumetotalpagetable"
+
+                  
                      this.getpersontable();
                   }
                  
@@ -93,6 +110,18 @@ import url from "../../js/totalurl.js";
     
     },
     methods:{
+         getdelete(data){
+          // 找到所有personid进行删除
+          console.log(data)
+             axios.post(url+'/resume.php',{deleteresume:data['personid']}).then(res=>{
+                              console.log(res.data);
+                              // 转跳页面
+                             
+                          })
+                       
+                    
+          
+         },
           comeback(){
               this.displayflag=true;
              
@@ -104,12 +133,13 @@ import url from "../../js/totalurl.js";
               var resume={};
               resume['taskid'] = taskid;
                resume['personid'] = personid;
-               axios.post(url+'/resume.php',{resume:resume}).then(res=>{
-                console.log(res.data);
-             })
-              
+               this.$emit('ongetchoose', resume)
+             
+              // 转跳成功页面
               // 储存到相关的表中
           },
+          // 触发前面
+
           getview(data){
             // 转跳页面
           if((navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i))) {
@@ -184,7 +214,7 @@ import url from "../../js/totalurl.js";
                             this.$refs.pagination.extractpageData(res.data,index);
 
                               this.disdata = this.$refs.pagination.disdata;
-                              console.log(this.disdata)
+                            
                               this.datalength = this.$refs.pagination.datalength; 
                         
               
@@ -196,10 +226,10 @@ import url from "../../js/totalurl.js";
                      
                   },
                    getpagepersondata(index){
-                           
+                         
                             var value = [];
-                            for(var i = 0;i<this.persondata.length-1;i++){
-                              value[i] = this.persondata[i];
+                            for(var i = 0;i<this.getbossvalue.length-1;i++){
+                              value[i] = this.getbossvalue[i];
                             }
                             
                            
@@ -230,11 +260,11 @@ import url from "../../js/totalurl.js";
                             }                   
                             // 得到index的数据
                            
-
+                            this.disdata = getvalue;
                             this.$refs.pagination.extractpageData(getvalue,index);
 
                             this.disdata = this.$refs.pagination.disdata;
-                             
+                            
                             this.datalength = this.$refs.pagination.datalength; 
                         
               
@@ -271,6 +301,7 @@ import url from "../../js/totalurl.js";
                           
                           if(this.$refs.pagination.getIndex()!=null&&!isNaN(this.$refs.pagination.getIndex())){
                               this.getpagedata(this.$refs.pagination.getIndex());
+
                             }else{
                               this.$refs.pagination.setIndex(1);
                               this.getpagedata(this.$refs.pagination.getIndex());
@@ -301,27 +332,34 @@ import url from "../../js/totalurl.js";
                        
                         var settotalnum = setdata[setdata.length-1]['COUNT(*)'];
 
-                     
+                      this.getbossvalue = value;
                       if(this.$refs.pagination.getTotalnum()!=null){
                        
                         if(this.$refs.pagination.getTotalnum()!=settotalnum){
-                        
+                         
                           this.$refs.pagination.extractData(value)
                                 this.disdata = this.$refs.pagination.disdata;
                                 this.datalength = this.$refs.pagination.datalength;
                         }else{
                           
                           if(this.$refs.pagination.getIndex()!=null&&!isNaN(this.$refs.pagination.getIndex())){
+                              
                               this.getpagepersondata(this.$refs.pagination.getIndex());
                             }else{
+                              
                               this.$refs.pagination.setIndex(1);
                               this.getpagepersondata(this.$refs.pagination.getIndex());
 
                             }
                         }
                       }else{
-                              console.log(3)
-                              this.$refs.pagination.extractData(value)
+                              var getnewvalue = [];
+                              for(var i = 0;i<2;i++){
+                                getnewvalue[i] = value[i];
+                              }
+                              getnewvalue[getnewvalue.length] = value[value.length-1];
+                              // console.log(getnewvalue) 
+                              this.$refs.pagination.extractData(getnewvalue)
                              
                               this.disdata = this.$refs.pagination.disdata;
                               this.datalength = this.$refs.pagination.datalength; 

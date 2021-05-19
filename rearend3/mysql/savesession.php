@@ -1,7 +1,8 @@
 <?php
-include "./function/mysql.php";
-include "./function/phonecode.php";
-include "./function/email.php";
+
+// include "./function/mysql.php";
+// include "./function/phonecode.php";
+// include "./function/email.php";
 	function savesession($session){
 		// 更新数据
 		
@@ -41,10 +42,7 @@ include "./function/email.php";
 			}
 
 		}
-		// if($sessionid['sessionid']==$data['session']['sessionid']){
-		// 	$array = array('userid'=>$data['session']['userid'],'username'=>$data['session']['username']);
-		// 	echo json_encode($array);
-		// }
+	
 		
 	}
 ?>

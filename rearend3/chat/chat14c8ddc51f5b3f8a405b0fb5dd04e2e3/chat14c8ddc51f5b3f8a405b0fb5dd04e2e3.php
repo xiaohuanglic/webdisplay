@@ -1,0 +1,5 @@
+<?php
+				header('Access-Control-Allow-Origin:*');
+				header('Access-Control-Allow-Methods:POST');//表示只允许POST请求
+				header('Access-Control-Allow-Headers:x-requested-with, content-type'); 
+				echo '{"context":"","imgpath":",","filepath":","},-';echo '{"context":"2021-05-11 18:49:34   sadasd:\n  \u4f60\u597d\n\n","imgpath":",","filepath":","},-';echo '{"context":"2021-05-11 18:49:52   sadasd:\n  \n\n\n","imgpath":",","filepath":"http:\/\/localhost:5001\/chat\/chat14c8ddc51f5b3f8a405b0fb5dd04e2e3\/userfile\/filef6fce62d3449fd3e7d0189569d53d054.zip,"},-';echo '{"context":"2021-05-11 18:50:3   sadasd:\n  \u6d4b\u8bd5\n\n","imgpath":",","filepath":","},-';echo '{"context":"2021-05-11 18:51:3   sadasd:\n  \n\n\n","imgpath":",","filepath":"http:\/\/localhost:5001\/chat\/chat14c8ddc51f5b3f8a405b0fb5dd04e2e3\/userfile\/file1faec8be5250f39034dd04ab04e12955.zip,"},-';echo '{"context":"2021-05-19 5:46:38   dfsdf:\n  \u6ca1\u653e\u6620\n\n","imgpath":",","filepath":","},-';echo '{"context":"2021-05-19 5:50:7   dfsdf:\n  12345\n\n","imgpath":",","filepath":","},-';

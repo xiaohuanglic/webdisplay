@@ -524,17 +524,12 @@
                 },
                 methods:{
                   viewresume(data){
-                    // console.log(data['taskid'])
-                    // createpersoncom
-                    var resume={};
-                    resume['taskid'] = data['taskid']
-                    var that1 = that
-                     axios.post(url+'/resume.php',{resume:resume}).then(res=>{   
+                
                            that.Allchild.clearright(that.Allchild)
                              // Allchild.clearright(Allchild);
-                            var creatcreatpersoncom = that1.createpersoncom(that.Allchild,that,res.data); 
+                             // console.log(res.data+"boss");
+                            var creatcreatpersoncom = that.createpersoncom(that.Allchild,that,data['taskid']); 
                             new creatcreatpersoncom().$mount('#addright');
-                          })
                     
                   },
                   getpagedata(index){
@@ -708,7 +703,7 @@
       
       return tableifm;
         },
-         createpersoncom(Allchild,that,getpersondata){
+       createpersoncom(Allchild,that,getpersondata){
           var html =  '<div><personcomponent :persondata="persondata"></personcomponent></div>';
           var addPersoncom = Vue.extend({
             template: html,

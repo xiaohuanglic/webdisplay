@@ -2,10 +2,12 @@
 header('Access-Control-Allow-Origin:*');
 header('Access-Control-Allow-Methods:POST');//表示只允许POST请求
 header('Access-Control-Allow-Headers:x-requested-with, content-type');
+include_once "./mysql/newserivce.php";
 include_once "./mysql/serivce.php";
 include_once "./mysql/boss.php";
 include_once "./mysql/free.php";
 include_once "./mysql/function/mysql.php";
+
 $data = "";
  if($_SERVER["REQUEST_METHOD"] == "GET"){
 		$method = $_GET["method"];

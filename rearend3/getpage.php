@@ -2,6 +2,7 @@
 header('Access-Control-Allow-Origin:*');
 header('Access-Control-Allow-Methods:POST');//表示只允许POST请求
 header('Access-Control-Allow-Headers:x-requested-with, content-type');
+include_once "./mysql/serivce.php";
 include "./mysql/main.php";
 include "./mysql/function/mysql.php";
 $data = "";
@@ -27,13 +28,23 @@ $data = "";
 					// $main->getJumpPage();
 					$main->getJumpPageMoreCon();
 				}else{
+					if(!empty($_GET["displayflag"])){
 					$main = new Main;
+				
 					
-					// $main->getJumpPage($show,$page,$totalnum,$size);
+					$getarray = array('table' => $show,'show' => $page,'totalnum' => $totalnum,'n' => $size);
+					$main->setData($getarray);
+					$main->getJumpDefinePageMoreCon(['dispalyflag'],['0']);
+					}else{
+					$main = new Main;
+				
 					
 					$getarray = array('table' => $show,'show' => $page,'totalnum' => $totalnum,'n' => $size);
 					$main->setData($getarray);
 					$main->getJumpPage();
+
+					}
+					
 				}
 			
 		}

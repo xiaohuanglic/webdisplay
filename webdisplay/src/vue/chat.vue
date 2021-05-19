@@ -1,6 +1,7 @@
 <template>
 	<div>
 	 <chatmodel  ref="child" :pageTimer="pageTimer"></chatmodel>
+	 <!-- <a href=".#/boss">查兰</a> -->
 	</div>
 </template>
 <script>
@@ -42,12 +43,13 @@ export default {
          		// 两个转跳方法
          		// 1.交谈
          		// 2.消息
-         		var html = '<div  ref="getchild" v-mouse:swipedown="downSlide" v-mouse:swipeup="upSlide" class="replayleft chathead"><ul class="chatperson "><li v-for="(item,index) in usernamelist" @click="displaychat(item,index)">{{item["username"]}}<span >({{item["usernum"]}})</span></li></span></ul></div>'
+         		var html = '<div  ref="getchild" v-mouse:swipedown="downSlide" v-mouse:swipeup="upSlide" class="replayleft chathead"><ul class="chatperson "><li v-for="(item,index) in usernamelist" @click="displaychat(item,index)" >{{item["username"]}}<span >({{item["usernum"]}})</span></li></ul></div>'
          		var addchat = Vue.extend({
          			template: html,
          			data() {
           			return{
-          			// pageTimer :{}, 	
+          			// pageTimer :{},
+          			admin:"admin1", 	
                   totalnum:0,
                   totalpage:0,
           				page:1,
@@ -297,13 +299,13 @@ export default {
                   },
                   getsetsessionfun(getresdata,i,o,getuerdata){
                   	 axios.get(getresdata[i]['chatmsg']).then(res=>{
-                     
+                                 
                            				var resdata = res.data;
                            				
 
                          				 getuerdata[o].val =  res.data
                          				  // console.log(getuerdata)
-                         				  console.log(o)
+                         				 
                               // 再重新赋值
                           				// this.getsavechatdata(res.data);
                           				localStorage.setItem('setsession', JSON.stringify(getuerdata));
@@ -313,28 +315,30 @@ export default {
                   gettotalchatnum(){
                   	// 判断有没有userid
                     var sessionid = JSON.parse(sessionStorage.getItem("vue-session-key"))['session-id']
-         // console.log(sessionid)
+        
                     axios.post(url+'/checksession.php',{sessionid:sessionid}).then(res=>{
                         
-                          // var myid = JSON.parse(sessionStorage.getItem("vue-session-key"))['username'][1];
+                     
                     var myid = res.data['userid'];
-                    // console.log(1);
+                   
                     axios.get(url+'/gettotalnum.php/?myid='+myid).then(res=>{
                     	
                       if(res.data!="没有数据"){
-                        console.log(res.data);
+                       
                     //     // 把所有的数据储存在session中
                         for(var i = 0;i<res.data.length;i++){
                         	if(myid==res.data[i]['myid']){
                         		// console.log(res.data[i]['userid'])
                         		this.setsession.push({
                               name:res.data[i]['userid'],
+                              myname:res.data[i]['myid'],
                               val:""
                             })
 
                         	}else if(myid==res.data[i]['userid']){
                         	this.setsession.push({
                               name:res.data[i]['userid'],
+                              myname:res.data[i]['myid'],
                               val:""
                         	})
                         	}
@@ -349,8 +353,8 @@ export default {
 
                         for(var i =0;i<res.data.length;i++){
                         	for(var j = 0;j<getuerdata.length;j++){
-                        		
-                        		if(getuerdata[j]['name']==res.data[i]['userid']){
+
+                        		if(getuerdata[j]['name']==res.data[i]['userid']&&getuerdata[j]['myname']==res.data[i]['myid']){
                         		
 
                         			var o = j
@@ -363,13 +367,14 @@ export default {
                   			for(var i = 0;i<res.data.length;i++){
                         	if(myid==res.data[i]['myid']){
                         		
-                        	this.usernamelist.push({chatid:res.data[i]["chatid"],username:res.data[i]["username"],userid:res.data[i]["userid"],usernum:res.data[i]["usernum"]});
+                        	this.usernamelist.push({chatid:res.data[i]["chatid"],username:res.data[i]["username"],userid:res.data[i]["userid"],myid:res.data[i]['myid'],usernum:res.data[i]["usernum"]});
 
                         	}else if(myid==res.data[i]['userid']){
-                        this.usernamelist.push({chatid:res.data[i]["chatid"],username:res.data[i]["myname"],userid:res.data[i]["userid"],usernum:res.data[i]["mynum"]});
+                        this.usernamelist.push({chatid:res.data[i]["chatid"],username:res.data[i]["myname"],userid:res.data[i]["userid"],myid:res.data[i]['myid'],usernum:res.data[i]["mynum"]});
                         	}
                    
                         }
+
                         var chatid = that.$route.query.chatid;
                         var eqealnum = -1;
                         var eqealdata = {};
@@ -390,15 +395,18 @@ export default {
                         			temp = temp1
                         			i++;
                         		}
+                            
+                            
                         	}
                         	this.usernamelist[0] =eqealdata;
                         	// 还有剔除数据 
                         	
                         }
                         // 清除
-                        sessionStorage.removeItem('clickflag')
-                        var resdata = res.data.length;
-                       	this.displaychat(this.usernamelist[0],0);
+                         sessionStorage.removeItem('clickflag')
+                            var resdata = res.data.length;
+                            this.displaychat(this.usernamelist[0],0);
+                       	
                         this.totalnum = resdata;
                         if(this.displaynum>=this.totalnum){
                         	this.displaynum = this.totalnum;
@@ -440,10 +448,10 @@ export default {
                   			for(var i = 0;i<res.data.length;i++){
                         	if(myid==res.data[i]['myid']){
                         		
-                        	this.usernamelist.push({chatid:res.data[i]["chatid"],username:res.data[i]["username"],userid:res.data[i]["userid"],usernum:res.data[i]["usernum"]});
+                        	this.usernamelist.push({chatid:res.data[i]["chatid"],username:res.data[i]["username"],userid:res.data[i]["userid"],myid:res.data[i]['myid'],usernum:res.data[i]["usernum"]});
 
                         	}else if(myid==res.data[i]['userid']){
-                        this.usernamelist.push({chatid:res.data[i]["chatid"],username:res.data[i]["myname"],userid:res.data[i]["userid"],usernum:res.data[i]["mynum"]});
+                        this.usernamelist.push({chatid:res.data[i]["chatid"],username:res.data[i]["myname"],userid:res.data[i]["userid"],myid:res.data[i]['myid'],usernum:res.data[i]["mynum"]});
                         	}
                    
                         }
@@ -475,11 +483,11 @@ export default {
           						}else{
           							if(myid==res.data['myid']){
                         				
-                        				this.usernamelist.push({chatid:res.data["chatid"],username:res.data["username"],userid:res.data["userid"],usernum:res.data["usernum"]});
+                        				this.usernamelist.push({chatid:res.data["chatid"],username:res.data["username"],userid:res.data["userid"],myid:res.data['myid'],usernum:res.data["usernum"]});
 
                         			}else if(myid==res.data['userid']){
                         				
-                        			this.usernamelist.push({chatid:res.data["chatid"],username:res.data["myname"],userid:res.data["userid"],usernum:res.data["mynum"]});
+                        			this.usernamelist.push({chatid:res.data["chatid"],username:res.data["myname"],userid:res.data["userid"],myid:res.data['myid'],usernum:res.data["mynum"]});
                         			}
           						}
 
@@ -506,26 +514,40 @@ export default {
                     		 	 		// if(item['userid']!=chatdata[i]['userid']){
                     		 	 			// console.log(res.data);
                     		 	 			for(var j = 0;j<res.data.length;j++){
-                                   // &&item['userid']!=chatdata[i]['userid']&&chatdata[i]['userid']==res.data[j]['userid']
-                    		 	 			if(userid==res.data[j]['userid']&&item['userid']!=chatdata[i]&&chatdata[i]['userid']==res.data[j]['userid']){
-                                    
+                                 
+                    		 	 			if(userid==res.data[j]['userid']&&!(sessionStorage.getItem('clickflag')==chatdata[i]['userid']&&sessionStorage.getItem('myclickflag')==chatdata[i]['myid'])&&chatdata[i]['userid']==res.data[j]['userid']){
+                                    				
                     		 	 					if( res.data[j]['mynum']!=0){
-                    		 	 						changindex.push(i);
+                    		 	 						if(chatdata[i]['userid']==res.data[j]['userid']&&chatdata[i]['myid']==res.data[j]['myid']){
+                    		 	 							changindex.push(i);
+
+                    		 	 							chatdata[i]['usernum'] = res.data[j]['mynum']
+                    		 	 						
+
+                    		 	 						}
+                    		 	 						
                     		 	 					}
-                    		 	 					chatdata[i]['usernum'] = res.data[j]['mynum']
+
+                    		 	 					
+
                     		 	 				}
-                                  if(userid==res.data[j]['myid']&&item['userid']!=chatdata[i]['userid']&&chatdata[i]['userid']==res.data[j]['userid']){
+                                  if(userid==res.data[j]['myid']&&!(sessionStorage.getItem('clickflag')==chatdata[i]['userid']&&sessionStorage.getItem('myclickflag')==chatdata[i]['myid'])&&chatdata[i]['userid']==res.data[j]['userid']){				
+                            						
                     		 	 					if( res.data[j]['usernum']!=0){
-                    		 	 						changindex.push(i);
+                    		 	 						if(chatdata[i]['userid']==res.data[j]['userid']&&chatdata[i]['myid']==res.data[j]['myid']){
+                    		 	 							changindex.push(i);
+                    		 	 							chatdata[i]['usernum'] = res.data[j]['usernum']
+                    		 	 						}
+                    		 	 						
                     		 	 					}
-                    		 	 					chatdata[i]['usernum'] = res.data[j]['usernum']
+                    		 	 					
                     		 	 				}
                     		 	 			}
                     		 	 	
 
-                    		 	 		// }
+                    		 	 		
                     		 	 	}
-                    		 	 	// console.log(changindex)
+                    		 	 
                     		 	 	var eqealnum = -1;
                         			var eqealdata = {};
                     		 	 	if(changindex.length!=0){
@@ -538,19 +560,19 @@ export default {
                         					
                         					while(i<=eqealnum){
                         						var temp1 = chatdata[i];
-                        						console.log("交换")
+                        					
                         						chatdata[i] = temp;
                         						temp = temp1
                         						i++;
                         						}
                         				}
                         					chatdata[0] =eqealdata;
+
                         					
                     		 	 		}
 
                     		 	 	}
-                    				newmsg['getnewnum'] = chatdata;
-                    				// console.log(newmsg)
+                    			
                         	
                     		 	
                     		 	})
@@ -559,15 +581,14 @@ export default {
 
           				},
           				displaychat(item,num){
-
-          					 // console.log(child.displayflag)
+          						
+          					
           					child.clearright(child);
                     
-                    		var chatdata = this.usernamelist
-                    	;
+                    		var chatdata = this.usernamelist;
                     		var time = null;
                     		var that1 = this;
-
+                    		sessionStorage.setItem('myclickflag',item['myid']);
                       var getusernum = function(item,chatdata,time,child,common,newmsg){  
                           // 从第二个开始提取
                            that1.getchatnum(item,chatdata,time,child,common,newmsg);
@@ -581,7 +602,12 @@ export default {
                         child.pageTimer.push(time);
                        	
                         common["time1"].push(time);
-          					that.createchat(that,child,item,num,common).$mount("#displaycontent");
+                       
+                        	that.createchat(that,child,item,num,common).$mount("#displaycontent");
+                        
+
+
+          					
           				}
 
           			}
@@ -592,18 +618,9 @@ export default {
          	},
           	createchat(that,child,chatname,num,common){
            		
-           		// var that = this;
-              // <div id="outdiv"> 
-              // <input type="file" multiple id="file" @change="uploadConfig">
-
-
-              //<div><input type="file"  id="getppic" accept="image/gif,image/jpeg,image/jpg,image/png" @change="addpicture($event)" ref="ppicInput" class="ppic"> 
-
-              // <img class="dispic" :src="" >
-
-              // <div class="getpic"><img class="dispic" :src="../image/fileimage/file.jpg" ><input type="file" multiple id="file" @change="uploadConfig" ></div>
-        	var html = '<div class="chathead"><div id="outdiv" @scroll="handleScroll"><div id="chatmsg"></div><div class="scrollbar" @mouseover="hoverScrollBar "><div class="scroll-div-y-bar"></div></div></div><div class="chatmiddle"><div class="getpicsmall"><img class="getpicsmall" src="../image/fileimage/uploadimg.jpg" ><input type="file"  id="getppic2" accept="image/gif,image/jpeg,image/jpg,image/png" @change="addpicture($event)" ref="ppicInput" class="ppic"></div><div class="getpicsmall"><img class="getpicsmall" src="../image/fileimage/file.jpg" ><input class="filestyle" type="file" multiple id="file" @change="uploadConfig" ></div></div><div id="outdivsend" @scroll="handleScroll"><div id="sendmsg"   @keyup="keyevent($event)"><span v-for="item in filelist">{{item["name"]}}</span><div id="getsendmsg" contenteditable="true"><img  v-for="item in piclist" :is="item.component" :imgsrc="item.imgsrc" class="getpicmiddle"></div></div><div class="scrollbar" @mouseover="hoverScrollBar "><div class="scroll-div-y-bar"></div></div></div></div>'
-        	// <div id="outdiv" @scroll="handleScroll"><div id="sendmsg" contenteditable="true"  @keyup.enter="keyevent()"></div><div class="scrollbar" @mouseover="hoverScrollBar "><div class="scroll-div-y-bar"></div></div></div>
+           
+        	var html = '<div class="chathead"><div id="outdiv" @scroll="handleScroll"><div id="chatmsg"></div><div class="scrollbar" @mouseover="hoverScrollBar "><div class="scroll-div-y-bar"></div></div></div><div v-if="getchatname.myid!=admin"class="chatmiddle"><div class="getpicsmall"><img class="getpicsmall" src="../image/fileimage/uploadimg.jpg" ><input type="file"  id="getppic2" accept="image/gif,image/jpeg,image/jpg,image/png" @change="addpicture($event)" ref="ppicInput" class="ppic"></div><div class="getpicsmall"><img class="getpicsmall" src="../image/fileimage/file.jpg" ><input class="filestyle" type="file" multiple id="file" @change="uploadConfig" ></div></div><div id="outdivsend" @scroll="handleScroll" v-if="getchatname.myid!=admin"><div id="sendmsg"   @keyup="keyevent($event)"><span v-for="item in filelist">{{item["name"]}}</span><div id="getsendmsg" contenteditable="true"><img  v-for="item in piclist" :is="item.component" :imgsrc="item.imgsrc" class="getpicmiddle"></div></div><div class="scrollbar" @mouseover="hoverScrollBar "><div class="scroll-div-y-bar"></div></div></div></div>'
+        
         	var addchat = Vue.extend({
                 template: html,
                 components: {
@@ -611,6 +628,8 @@ export default {
                 },
                 data() {
           			return{
+          				getchatname:chatname,
+          				admin:"admin1",
           				userid:"",
           				myid:"",
           				date:'',
@@ -641,12 +660,10 @@ export default {
           		},
           		mounted() {
                 
-                  // child.displayflag = false;
-          					 
-                // console.log(scrollYBar.style.height)
+              console.log(chatname);
                 this.calcSize();
           			this.load();
-                // this.scrollbottom();
+             
 
           		},
               watch: {
@@ -1020,11 +1037,11 @@ export default {
             	window.clearTimeout(timer);   // 关闭延时定时器
         	},
           	settimer(j,chatdata,getuerdata,chatname,time,common){
-          		// console.log(getuerdata[j]['name']+"-------------"+chatname);
-          		// var getnewchatname ==sessionStorage.getItem('clickflag');
+          	
           		child.pageTimer.push(time);
           		 common["time2"].push(time)
-          		if(getuerdata[j]['name']==sessionStorage.getItem('clickflag')){
+          		
+          		if(getuerdata[j]['name']==sessionStorage.getItem('clickflag')&&getuerdata[j]['myname']==sessionStorage.getItem('myclickflag')){
           			 axios.get(chatdata).then(res=>{
                       this.chatmsg = res.data
                       if(getuerdata[j]['val']!=""){
@@ -1053,11 +1070,10 @@ export default {
                     })
           			
           		}else{
+
           			console.log("清除定时器");	
           			 clearInterval(time)
-          			 if(time){
-          			 	clearInterval(time)
-          			 }
+          			
           			 
 
           
@@ -1068,29 +1084,27 @@ export default {
           	getchatData(chatdata,flag){
               var getuerdata = JSON.parse(localStorage.getItem('setsession'));
               localStorage.getItem('setsession')
-              // clearInterval(time)
-              // console.log(chatname['userid']);
-              // if(sessionStorage.getItem('clickflag')==null){
+              
+
               	sessionStorage.setItem('clickflag',chatname['userid']);
-              // }
+              
               
               for(var i =0;i<getuerdata.length;i++){
-              
-                if(getuerdata[i]['name']==chatname['userid']){
-                    if(getuerdata[i]['val']!=""){
+              if(getuerdata[i]['name']==chatname['userid']&&getuerdata[i]['myname']==chatname['myid']){
+                if(getuerdata[i]['val']!=""){
 
 
                       this.getsavechatdata(getuerdata[i]['val']);
                       var j = i;
-                      // var __sto = setInterval;
-                      
+                   
                       var that1 = this
-                  
+                       
                         var time = window.setInterval(function(){
-                        	that1.settimer(j,chatdata,getuerdata,chatname['userid'],time,common)
+                          that1.settimer(j,chatdata,getuerdata,chatname['userid'],time,common)
                         },1000);
                         child.pageTimer.push(time);
                         common["time2"].push(time)
+                        that1.settimer(j,chatdata,getuerdata,chatname['userid'],time,common)
                     }else{
                       var j = i;
                        axios.get(chatdata).then(res=>{
@@ -1106,7 +1120,9 @@ export default {
                         
                     }
                     break;
-                }
+
+              }
+                
               }
 
 

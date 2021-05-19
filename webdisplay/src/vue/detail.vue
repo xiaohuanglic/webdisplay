@@ -3,6 +3,7 @@
 </template>
 <script>
 import display1 from './dispalymodel/choosedisplay/display1.vue'
+import comment from './comment.vue'
 import display3 from './dispalymodel/choosedisplay/display3.vue'
 import forestage from './forestage .vue'
 import axios from "axios";
@@ -10,7 +11,7 @@ import Vue from 'vue'
  axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8'
 export default {
     
-        components: {forestage,display1,display3},
+        components: {forestage,display1,display3,comment},
         data() {
           return{
             id:'',
@@ -43,8 +44,8 @@ export default {
            		 var taskid = this.$route.query.taskid
            		 this.resdata = this.SendId(taskid,userid,'taskid');
            		 this.resdata.then((value)=>{
-              				console.log(value)
-              			this.creattaskpage(value,that.$router)
+              				
+              			this.creattaskpage(value,that.$router,that)
             	})
            	}
            
@@ -188,21 +189,24 @@ export default {
                 })
                 new addpersonal().$mount('#change')
           },
-          creattaskpage(value,router){
-               var html ='<div><div class="taskhead clearfix"><ul class="taskhalf"><li><h3><span>{{displaydata.taskposition}}</span><span>{{displaydata.salary}}</span></h3><p>{{displaydata.education}}</p><p>{{displaydata.experiencerequirement}}</p><p>更新时间:{{displaydata.updatedate}}</p></li><li><p><img :src="displaydata.avatar"><label>公司名称:</label>{{displaydata.taskname}}</p><p><label>地址：</label>{{displaydata.address}}</p></li></ul></div><div class="tasktail"><div><p>职位描述:</p><div>{{displaydata.jobrequirements}}</div><p>任职描述:</p><div>{{displaydata.positiondescription}}</div></div><div v-if="displaydata.proimage"  class="taskimg clearfix"><p>公司图片:</p><ul v-if="displaydata.proimage"><li v-for="item in displaydata.proimage"><img :src="item"></li></ul></div></div><input type="button" @click=sendresume(displaydata.taskid) value="投递简历"/><input type="button" @click=chatperson() value="交谈"/></div>'
+          creattaskpage(value,router,that){
+               var html ='<div><div class="taskhead clearfix"><ul class="taskhalf"><li><h3><span>{{displaydata.taskposition}}</span><span>{{displaydata.salary}}</span></h3><p>{{displaydata.education}}</p><p>{{displaydata.experiencerequirement}}</p><p>更新时间:{{displaydata.updatedate}}</p></li><li><p><img :src="displaydata.avatar"><label>公司名称:</label>{{displaydata.taskname}}</p><p><label>地址：</label>{{displaydata.address}}</p></li></ul></div><div class="tasktail"><div><p>职位描述:</p><div>{{displaydata.jobrequirements}}</div><p>任职描述:</p><div>{{displaydata.positiondescription}}</div></div><div v-if="displaydata.proimage"  class="taskimg clearfix"><p>公司图片:</p><ul v-if="displaydata.proimage"><li v-for="item in displaydata.proimage"><img :src="item"></li></ul></div></div><input type="button" @click=sendresume(displaydata.taskid) value="投递简历"/><input type="button" @click=chatperson() value="交谈"/><comment :taskid="taskid" :istask="istask"></comment></div>'
                   var addpersonal = Vue.extend({
                   template: html,
-                   components: {display1,display3},
+                   components: {display1,display3,comment},
                   data() {
                     return{
                         displaydata:{},
-                   
+                        taskid:that.$route.query.taskid,
+                        istask:that.$route.query.istask
                       }
                   },
                   watch:{
                   
                   },
                    mounted() {
+                    // this.taskid = 
+                    
                       if(value.proimage==''||value.proimage===null||typeof(value.proimage) == undefined){
                                    delete value.proimage;
                               }else{

@@ -35,15 +35,30 @@ import axios from "axios";
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8'
 export default {
     methods:{
-          clearright(e){
-            var parent = e.$root.$el.getElementsByClassName("right")[0]
-            var childs = e.$root.$el.getElementsByClassName("right")[0].childNodes
-            for(var i = 0; i < childs.length; i++) { 
+          // clearright(e){
+          //   var parent = e.$root.$el.getElementsByClassName("right")[0]
+          //   var childs = e.$root.$el.getElementsByClassName("right")[0].childNodes
+          //   for(var i = 0; i < childs.length; i++) { 
+          //       parent.removeChild(childs[i]);
+          //     }
+              
+          //   let p = document.createElement('div');
+          //   p.setAttribute('id','addright')
+          //   parent.appendChild(p)
+           
+             
+              
+          // },
+           clearchange(e){
+            var parent = e.$root.$el.getElementsByClassName("middle")[0]
+            var childs = e.$root.$el.getElementsByClassName("middle")[0].childNodes
+              for(var i = 0; i < childs.length; i++) { 
                 parent.removeChild(childs[i]);
               }
               
+              
             let p = document.createElement('div');
-            p.setAttribute('id','addright')
+            p.setAttribute('id','change')
             parent.appendChild(p)
            
              

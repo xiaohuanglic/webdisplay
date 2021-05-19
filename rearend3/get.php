@@ -2,11 +2,14 @@
 header('Access-Control-Allow-Origin:*');
 header('Access-Control-Allow-Methods:POST');//表示只允许POST请求
 header('Access-Control-Allow-Headers:x-requested-with, content-type');
-include "./mysql/main.php";
-include "./mysql/detail.php";
 
-include "./mysql/newserivce.php";
-include "./mysql/function/mysql.php";
+include_once "./mysql/serivce.php";
+include_once "./mysql/boss.php";
+include_once "./mysql/main.php";
+include_once "./mysql/detail.php";
+include_once "./mysql/chat.php";
+include_once "./mysql/newserivce.php";
+include_once "./mysql/function/mysql.php";
 $data = "";
  if($_SERVER["REQUEST_METHOD"] == "GET"){
 		$show = $_GET["show"];
@@ -35,7 +38,9 @@ $data = "";
 					$totalnum = $_GET["totalnum"];
 					$displaynum = $_GET["displaynum"];
 					if(!empty($show)&&!empty($page)){
-						getchatperson($show,$page,$totalnum,$displaynum);
+						// getchatperson($show,$page,$totalnum,$displaynum);
+						$chat = new Chat();
+						$chat->getchatperson($show,$page,$totalnum,$displaynum);
 					}else{
 						$show = $_GET["chatname"];
 						if(!empty($show)){
@@ -57,6 +62,15 @@ $data = "";
 			
 		} else{
 			if($show=='Free'){
+				if(!empty($_GET['displayflag'])){
+
+					$boss = new Boss;
+					$getarray = array('table' => $show);
+			
+					$boss->setData($getarray);
+					$boss->gettasktablenum(['dispalyflag'],['0']);
+
+				}else{
 				$experiencerequirement = $_GET["experiencerequirement"];
 				$education = $_GET["education"];
 				$salary = $_GET["salary"];
@@ -72,6 +86,9 @@ $data = "";
 					$main = new Main;
 					$main->getBossData();	
 				}
+
+				}
+			
 				
 			}
 			if($show=='Boss'){

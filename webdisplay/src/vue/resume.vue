@@ -4,13 +4,15 @@
 </template>
 <script>
 import forestage from './forestage .vue'
+import success from './success.vue'
 import axios from "axios";
 import personcomponent from './person/personcomponent.vue'
 import Vue from 'vue'
+import url from "../js/totalurl.js";
  axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8'
 export default {
     
-        components: {forestage,personcomponent},
+        components: {forestage,personcomponent,success},
         data() {
           return{
             id:'',
@@ -23,7 +25,8 @@ export default {
         mounted: function () {
         	// var userid = JSON.parse(sessionStorage.getItem("vue-session-key"))['username'][1]
         	var taskid = this.$route.query.taskid
-          this.creatpersonpage(taskid)
+          var that = this;
+          this.creatpersonpage(taskid,that)
         
            
            
@@ -36,8 +39,38 @@ export default {
         },
 
         methods:{
-          creatpersonpage(value){
-               var html ='<div><personcomponent :taskid="taskid"></personcomponent></div>'
+          creatsuccess(that){
+             var html ='<div><success></success></div>'
+                  var addsuccess = Vue.extend({
+                  template: html,
+                   components: {success},
+                  data() {
+                    return{
+                        taskid:value,
+                   
+                      }
+                  },
+                  watch:{
+                  
+                  },
+                   mounted() {
+                     
+                     
+                      
+
+                      
+                   },
+                   methods:{
+
+
+                   },
+                 
+
+                })
+                new addsuccess().$mount('#change')
+          },
+          creatpersonpage(value,that){
+               var html ='<div><personcomponent :taskid="taskid" v-on:ongetchoose="ongetchoose"></personcomponent></div>'
                   var addpersonal = Vue.extend({
                   template: html,
                    components: {personcomponent},
@@ -58,7 +91,17 @@ export default {
                       
                    },
                    methods:{
-                    
+                    ongetchoose(resume){
+                       
+                       axios.post(url+'/resume.php',{resume:resume}).then(res=>{
+                              console.log(res.data);
+                              // 转跳页面
+                             
+                          })
+                       var child = that.$refs.child
+                       child.clearchange(child);
+                       that.creatsuccess();
+                    }
 
                    },
                  
@@ -76,6 +119,3 @@ export default {
 
 
 </style>
-<!-- <div class="checkbox" ><div v-for="(value, key, index) in promoney"><label class="moneytext">{{key}}:{{value}}</label><input type="checkbox" v-model="whom" v-bind:value="key+space+value"  @click="chooseActivity(index)"/></div></div> -->
-<!-- <input type="button" @click=order() value="付款"/> -->
-<!-- <a :href=item class="pichref"></a> -->

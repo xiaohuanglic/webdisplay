@@ -73,7 +73,7 @@
     	</ul>
     	<ul class="mainli">
     		
-    		<li v-for="(data,index) in disdata" v-if="index<datalength">
+    		<li v-for="(data,index) in disdata" v-if="index<datalength&&data['dispalyflag']!=0">
     			<div  class="item-wrap" @click="jumpDeatail(data)"><div  class="left"><h3  class="pointer position-name text-ellipsis"><a  href="/job/26122" class="">
 										{{data['taskposition']}}
 									</a></h3> <div  class="info"><div  class="info-left"><span  class="info-span">
@@ -214,7 +214,7 @@ export default {
   						}
   						
   							axios.get(url).then(res=>{
-  								console.log(res.data);
+  							
               				this.extractData(res.data);
            
             			})
@@ -327,6 +327,7 @@ export default {
       getuser(){
          var sessionid = JSON.parse(sessionStorage.getItem("vue-session-key"))['session-id']
          // console.log(sessionid)
+          
            axios.post(this.$url+'/checksession.php',{sessionid:sessionid}).then(res=>{
               console.log(res.data);
               this.myid = res.data['userid'];
@@ -495,7 +496,7 @@ export default {
         },	
         // 公用方法
         extractData(data){
-        
+              // console.log(data);
               this.jsondata(data);
             
              

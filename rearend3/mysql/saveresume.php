@@ -1,8 +1,8 @@
 <?php
-include "./function/mysql.php";
-include "./function/phonecode.php";
-include "./function/email.php";
-include "newserivce.php";
+//  header('Access-Control-Allow-Origin:*');
+// header("Access-Control-Allow-Credentials:true");
+// header("Access-Control-Allow-Methods:OPTION, POST, GET");
+// header("Access-Control-Allow-Headers X-Requested-With, Content-Type");
 class Resume{
 	function saveresume($data){
 		// 存储到数据库中
@@ -54,6 +54,10 @@ class Resume{
     			// echo json_encode($array);
 		});
 		
+	}
+
+	function deleteResume($personid){
+		DeleteData('resume',['personid'],["'".$personid."'"]);
 	}
 
 }

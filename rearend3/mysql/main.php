@@ -1,5 +1,9 @@
 <?php
-include "serivce.php";
+
+//  header('Access-Control-Allow-Origin:*');
+// header("Access-Control-Allow-Credentials:true");
+// header("Access-Control-Allow-Methods:OPTION, POST, GET");
+// header("Access-Control-Allow-Headers X-Requested-With, Content-Type");
 
 class Main{
 	private $experiencerequirement;
@@ -81,9 +85,9 @@ class Main{
 	public function getBossData(){
 
 
-	getTableData("*","task",[0,2]);
+	getTableDatacon("*","task",['dispalyflag'],['1'],[0,2]);
 	
-
+	
 	}
 	public function getFreeData(){
 
@@ -142,8 +146,8 @@ public function getJumpPage(){
 }
 
 public function getJumpPageMoreCon(){
-	$key=['experiencerequirement','education','salary'];
-	$array=[$this->experiencerequirement,$this->education,$this->salary];
+	$key=['experiencerequirement','education','salary','dispalyflag'];
+	$array=[$this->experiencerequirement,$this->education,$this->salary,'1'];
 	
 	$newkey = getnewkey($key,$array);
 	$newarray =getnewvalue($key,$array);
@@ -171,6 +175,37 @@ public function getJumpPageMoreCon(){
 	}else{
 		// 进行单条数据提取;
 		chatPageLimitCon('*',$flagtable,$newkey,$newarray,[$strat,($this->totalnum%$this->n)]);
+	}
+}
+public function getJumpDefinePageMoreCon($key,$array){
+
+	
+	// $newkey = getnewkey($key,$array);
+	// $newarray =getnewvalue($key,$array);
+	$strat = ($this->show-1)*$this->n;
+	$end = (($this->show-1)*$this->n)+($this->n-1);
+	if($end>($this->totalnum-1)){
+		$end = $this->totalnum-1;
+	}
+	// 如果$table为Boss,表为person
+	// 反而为表为task
+
+	if($this->table=="Boss"){
+		$flagtable = "person";
+	}else{
+		$flagtable = "task";
+	}
+	// if($strat==0){
+	// 	$end = $end+1;
+	// }
+	if($strat!=$end){
+		// $limit = ($strat,$end);
+		// 提取方法;
+		chatPageLimitCon('*',$flagtable,$key,$array,[$strat,$this->n]);
+	
+	}else{
+		// 进行单条数据提取;
+		chatPageLimitCon('*',$flagtable,$key,$array,[$strat,($this->totalnum%$this->n)]);
 	}
 }
 }

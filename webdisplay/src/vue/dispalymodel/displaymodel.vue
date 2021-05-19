@@ -60,7 +60,10 @@
     methods:{
     	Jumpdisplay(item){
          // this.getResData(this.getpersonid);
-    		this.chooseindex = item;
+         	
+         	this.chooseindex = item;
+       
+    		
     		
     	},
       getResData(personid){

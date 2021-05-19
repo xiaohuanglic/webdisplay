@@ -186,6 +186,7 @@ export default {
               this.clicknum = 1;
               this.displaycolor(this.clicknum);
               this.goPage();
+
               if((this.nowpage+2)>=this.totalpage){
                   this.diaplaypage = this.totalpage;
               }else{
@@ -202,7 +203,6 @@ export default {
             
             this.jsondata(data);
             this.disdata = data;
-            console.log(this.disdata)
             this.datalength = data.length;
             this.displaycolor(index);
             this.Pagination(index,2);

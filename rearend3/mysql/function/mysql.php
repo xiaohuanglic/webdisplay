@@ -1,4 +1,5 @@
 <?php
+
 $servername = "localhost:3306";
 $username = "root";
 $password = "123456";
@@ -303,6 +304,16 @@ function Selectmorelimitcon($array,$table,$condition,$data,$num,$callback){
   $sql = "SELECT ".$str1." "."FROM ".$table." WHERE ".$str2." LIMIT ".$str3;
   // echo $sql;
   return Getdata($sql,$conn,$callback);
+}
+function Selectmorelimitcontest($array,$table,$condition,$data,$num,$callback){
+  global $conn;
+  $string2 = "";
+  $str1 = datafor($array);
+  $str2 = moreselectdata($condition,$data);
+  $str3 = limitdata($num);
+  $sql = "SELECT ".$str1." "."FROM ".$table." WHERE ".$str2." LIMIT ".$str3;
+  echo $sql;
+  // return Getdata($sql,$conn,$callback);
 }
 function SelectLimitmoretable($array,$table,$condition,$data,$callback){
    global $conn;

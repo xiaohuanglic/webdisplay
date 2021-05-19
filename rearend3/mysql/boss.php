@@ -1,6 +1,5 @@
 <?php
-// include "serivce.php";
-include_once "newserivce.php";
+
 class Boss{
 	private $task;
 	private $table;
@@ -10,6 +9,7 @@ class Boss{
 	private $userid;
 	private $taskid;
 	private $method;
+	private $dispalyflag;
 	public function setData($getarray){
 		foreach ($getarray as $key => $value) {
 			// for($i = 0;$i<sizeof($array);$i++){
@@ -70,6 +70,14 @@ class Boss{
 					}
 					
 				}
+				if($key == 'dispalyflag'){
+					
+					if(!empty($value)){
+						$this->dispalyflag = $value;
+						
+					}
+					
+				}
 				
 		}
 	}
@@ -79,7 +87,7 @@ class Boss{
 	}
 	public function testupdatetask(){
 	
-
+		
 		newUpdatetaskinfo($this->task);
 	
 	}
@@ -91,6 +99,16 @@ class Boss{
 	}else{
 		getTableDatacon("*","task",['userid'],["'".$this->userid."'"],[0,2]);
 	}
+	
+	}
+	public function gettasktablenum($key,$array){
+
+	// if($this->table=='Boss'){
+
+		// getTableDatacon("*","person",['dispalyflag'],["'".$this->dispalyflag."'"],[0,2]);
+	// }else{
+		getTableDatacon("*","task",$key,$array,[0,2]);
+	// }
 	
 	}
 	public function getJumpPagecon(){
@@ -128,6 +146,7 @@ class Boss{
 	}
 	// echo $strat." ".$end;
 }
+
 	public function deleteTask(){
 		deleteperson($this->taskid,$this->userid,$this->method,'taskid');
 	

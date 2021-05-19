@@ -2,9 +2,7 @@
 header('Access-Control-Allow-Origin:*');
 header('Access-Control-Allow-Methods:POST');//表示只允许POST请求
 header('Access-Control-Allow-Headers:x-requested-with, content-type');
-  header('Access-Control-Allow-Origin:*');
-  // header('Access-Control-Allow-Methods:POST');//表示只允许POST请求
-header('Access-Control-Allow-Headers:x-requested-with, content-type');
+
 require './mysql/function/PHPMailer-master/src/Exception.php'; //文件相对路径
 require './mysql/function/PHPMailer-master/src/PHPMailer.php'; 
 require './mysql/function/PHPMailer-master/src/SMTP.php';

@@ -1,5 +1,9 @@
 <?php
 // include "serivce.php";
+//  header('Access-Control-Allow-Origin:*');
+// header("Access-Control-Allow-Credentials:true");
+// header("Access-Control-Allow-Methods:OPTION, POST, GET");
+// header("Access-Control-Allow-Headers X-Requested-With, Content-Type");
 class Detail{
 	private $userid;
 	private $id;

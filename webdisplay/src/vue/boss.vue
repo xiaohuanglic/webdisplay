@@ -75,11 +75,33 @@ import url from "../js/totalurl.js";
               }
                    
             }
+          // 判断有没taskid
+
           this.Allchild = this.$refs.child;
           // this.getrightMenuObj()
           var that = this;
-          var Profile = this.personalIntro(this.Allchild,that);
-          new Profile().$mount('#addleft');
+          // if(){
+
+          // }else{
+          
+            var gettaskid = this.$route.query.taskid
+            var getuserid = this.$route.query.userid
+            if(typeof(gettaskid)!="undefined"&&typeof(getuserid)!="undefined"){
+              // 显示修改页面;
+             var getvalue =  this.creatpersontable(this.Allchild,that);
+             var item={
+              'taskid':gettaskid,
+              'userid':getuserid
+             }
+             new getvalue().Getupdate(1,item);
+            }else{
+                 var Profile = this.personalIntro(this.Allchild,that);
+                new Profile().$mount('#addleft');
+
+            }
+         
+          // }
+          
         },
 
         data() {
@@ -155,7 +177,7 @@ import url from "../js/totalurl.js";
         // 分出去
   // <label for="address">填写地址:</label><div><b-form-textarea id="address" v-model="address" placeholder="输入地址" rows="3" max-rows="6"></b-form-textarea><pre class="mt-3 mb-0">{{ address }}</pre></div>
         creatPersonal(Allchild,that){
-            var html =  '<form id="addtask"><div><img :src="upload" class="Avatar"><input type="file" name="avatar" id="uppic" accept="image/gif,image/jpeg,image/jpg,image/png" @change="changeImage($event)" ref="avatarInput" class="uppic"></div></br><input type="hidden" id="taskid" v-model="taskid"><label for="taskname">公司名称:</label><input type="text" id="taskname" v-model="taskname" required="required"></br></br><label for="taskposition">公司职位:</label><input type="text" id="taskposition" v-model="taskposition" required="required"></br></br><label for="address">填写地址:</label><div><b-form-textarea id="address" v-model="address" placeholder="输入地址" rows="3" max-rows="6"></b-form-textarea></div><label for="positiondescription">职位描述:</label><div><b-form-textarea id="positiondescription" v-model="positiondescription" placeholder="Enter something..." rows="3" max-rows="6"></b-form-textarea></div><label for="jobrequirements">任职要求:</label><div><b-form-textarea id="jobrequirements" v-model="jobrequirements" placeholder="Enter something..." rows="3" max-rows="6"></b-form-textarea></div><taskmodel v-on:experiencerequirement="experiencerequirement" v-on:education="education" v-on:salary="salary" :getexperiencerequirement="getexperiencerequirement" :geteducation="geteducation" :getsalary="getsalary"></taskmodel><input type="file" name="ppic" id="getppic" accept="image/gif,image/jpeg,image/jpg,image/png" @change="addpicture($event)" ref="ppicInput" class="ppic"><div><div v-for="(item,index) in list" :is="item.component" :imgsrc="item.imgsrc" :indexnum="item.index" :oldflag="item.oldflag" :key="item" v-rightClick = "{getrightMenuObj}" ></div></div><br><br><input type="button" value="提交" class="submit" @click="Push()"/><p v-if="imgmeg!=stringflag">{{imgmeg}}</p><rightclick ref="rightclick"></rightclick></form>'
+            var html =  '<form id="addtask"><div><img :src="upload" class="Avatar"><input type="file" name="avatar" id="uppic" accept="image/gif,image/jpeg,image/jpg,image/png" @change="changeImage($event)" ref="avatarInput" class="uppic"></div></br><input type="hidden" id="taskid" v-model="taskid"><label for="taskname">公司名称:</label><input type="text" id="taskname" v-model="taskname" required="required"></br></br><label for="taskmobile">手机号码:</label><input type="text" id="taskmobile" v-model="taskmobile" required="required"></br></br><label for="taskposition">公司职位:</label><input type="text" id="taskposition" v-model="taskposition" required="required"></br></br><div class="taskarea"><label for="taskprovince">省份:</label><input type="text" id="taskprovince" v-model="taskprovince" required="required"><label for="taskcity ">市:</label><input type="text" id="taskcity" v-model="taskcity" required="required"><label for="taskdistrict ">区:</label><input type="text" id="taskdistrict" v-model="taskdistrict" required="required"></div><label for="address">填写地址:</label><div><b-form-textarea id="address" v-model="address" placeholder="输入地址" rows="3" max-rows="6"></b-form-textarea></div><label for="positiondescription">职位描述:</label><div><b-form-textarea id="positiondescription" v-model="positiondescription" placeholder="Enter something..." rows="3" max-rows="6"></b-form-textarea></div><label for="jobrequirements">任职要求:</label><div><b-form-textarea id="jobrequirements" v-model="jobrequirements" placeholder="Enter something..." rows="3" max-rows="6"></b-form-textarea></div><taskmodel v-on:experiencerequirement="experiencerequirement" v-on:education="education" v-on:salary="salary" :getexperiencerequirement="getexperiencerequirement" :geteducation="geteducation" :getsalary="getsalary"></taskmodel><input type="file" name="ppic" id="getppic" accept="image/gif,image/jpeg,image/jpg,image/png" @change="addpicture($event)" ref="ppicInput" class="ppic"><div><div v-for="(item,index) in list" :is="item.component" :imgsrc="item.imgsrc" :indexnum="item.index" :oldflag="item.oldflag" :key="item" v-rightClick = "{getrightMenuObj}" ></div></div><br><br><input type="button" value="提交" class="submit" @click="Push()"/><p v-if="imgmeg!=stringflag">{{imgmeg}}</p><rightclick ref="rightclick"></rightclick></form>'
             var addpersonal = Vue.extend({
               template: html,
               components: {
@@ -168,6 +190,7 @@ import url from "../js/totalurl.js";
                       imgmeg:"",
                       stringflag:"",
                         change:"",
+                        taskmobile:"",
                         taskid:"",
                         taskname:"",
                         taskposition:"",
@@ -179,6 +202,9 @@ import url from "../js/totalurl.js";
                         getsalary:"",
                         address:"",
                         // personintro:"",
+                        taskprovince:"",
+                        taskdistrict:"",
+                        taskcity:"",
                         upload:'',
                         add:'',
                         dom:"",
@@ -381,8 +407,12 @@ import url from "../js/totalurl.js";
                    perbaseinfo['flag'] ='task';
                    perbaseinfo['taskname'] = this.taskname;
                    // perbaseinfo['userid'] = JSON.parse(sessionStorage.getItem("vue-session-key"))['username'][1];
+                   perbaseinfo['dispalyflag'] ='0';
                    perbaseinfo['userid'] = res.data['userid'];
                    perbaseinfo['taskid'] = this.taskid
+                   perbaseinfo['province'] = this.taskprovince
+                   perbaseinfo['city'] = this.taskcity
+                   perbaseinfo['district'] = this.taskdistrict
                    perbaseinfo['avatar'] = this.upload
                    perbaseinfo['proimage'] = this.listBolb
                    perbaseinfo['imagenum'] = this.imagenum
@@ -390,6 +420,7 @@ import url from "../js/totalurl.js";
                    perbaseinfo['deleteimgid'] = this.deleteimgid
                    perbaseinfo['listindex'] = listindex;
                    perbaseinfo['addnum'] = this.addnum;
+                   perbaseinfo['mobilphone'] = this.taskmobile
                    perbaseinfo['taskposition'] = this.taskposition;
                    perbaseinfo['address'] = this.address;
                   perbaseinfo['experiencerequirement'] = this.getexperiencerequirement;
@@ -483,7 +514,7 @@ import url from "../js/totalurl.js";
           // 导入模板，迟一点
           // 添加分页模块
           var tableifm = Vue.extend({
-                template:'<div><table><tr><th v-for="(item, index) in tdhead" v-if="index ==1||index >=3">{{item}}</th></tr><tr v-for="(data,index) in disdata" v-if="index<datalength"><td>{{data["taskname"]}}</td><td>{{data["personinfo"]}}</td><td @click=Getupdate(1,data)>修改</td><td @click=Getupdate(2,data)>删除</td><td @click=viewresume(data)>查看简历</td></tr></table><pagination ref="pagination" @getpageData="getpagedata"></pagination></div>',
+                template:'<div><table><tr><th v-for="(item, index) in tdhead" v-if="index ==1||index >=3">{{item}}</th></tr><tr v-for="(data,index) in disdata" v-if="index<datalength"><td>{{data["taskname"]}}</td><td>{{data["personinfo"]}}</td><td @click=Getupdate(1,data)>修改</td><td @click=Getupdate(2,data)>删除</td><td @click=viewresume(data)>查看简历</td><td @click=deleteComment(data)>查看评论</td></tr></table><pagination ref="pagination" @getpageData="getpagedata"></pagination></div>',
                  components: {
                   pagination,
 
@@ -526,18 +557,24 @@ import url from "../js/totalurl.js";
                   
                 },
                 methods:{
+                	deleteComment(data){
+                    	 var divname=Allchild.$root.$el.getElementsByClassName("right")[0].childNodes[0].getAttribute('id')
+                    	var Comment = that.displayComment(Allchild,that,data);
+                    	 if(divname!="addright"){
+                          Allchild.clearright(Allchild)
+                        }
+                    	new Comment().$mount("#addright")
+                    },
                   viewresume(data){
-                    // console.log(data['taskid'])
+                    // console.log()
                     // createpersoncom
-                    var resume={};
-                    resume['taskid'] = data['taskid']
-                    var that1 = that
-                     axios.post(this.$url+'/resume.php',{resume:resume}).then(res=>{   
+                  
                            that.Allchild.clearright(that.Allchild)
                              // Allchild.clearright(Allchild);
-                            var creatcreatpersoncom = that1.createpersoncom(that.Allchild,that,res.data); 
+                             // console.log(res.data+"boss");
+                            var creatcreatpersoncom = that.createpersoncom(that.Allchild,that,data['taskid']); 
                             new creatcreatpersoncom().$mount('#addright');
-                          })
+                         
                     
                   },
                   getpagedata(index){
@@ -545,12 +582,13 @@ import url from "../js/totalurl.js";
                      var sessionid = JSON.parse(sessionStorage.getItem("vue-session-key"))['session-id']
          // console.log(sessionid)
                       axios.post(this.$url+'/checksession.php',{sessionid:sessionid}).then(res=>{
+
                          // var userid = JSON.parse(sessionStorage.getItem('vue-session-key'))['username'][1];
                           var userid = res.data['userid'];
                       this.$refs.pagination.show = "Free"
                       
                        axios.get(this.$url+'/gettablepage.php/?page='+index+'&&totalnum='+ this.$refs.pagination.totalnum+'&&size=2&&show='+this.$refs.pagination.show+'&&userid='+userid).then(res=>{
-                      
+                          
                             this.$refs.pagination.extractpageData(res.data,index);
                               this.disdata = this.$refs.pagination.disdata;
                               this.datalength = this.$refs.pagination.datalength; 
@@ -571,15 +609,18 @@ import url from "../js/totalurl.js";
                     this.show='Free';
 
                     // var userid = JSON.parse(sessionStorage.getItem('vue-session-key'))['username'][1];
+
+                   
                      var userid =res.data['userid'];
                     // console.log(userid);
                     axios.get(this.$url+'/gettable.php/?show='+this.show+'&&flag='+this.flag+'&&userid='+userid).then(res=>{
+                         console.log(res.data)
                         var setdata = res.data; 
                         for(var i =0;i<setdata.length;i++){
                         setdata[i] = JSON.parse(setdata[i]);
                         }
                           var settotalnum = setdata[setdata.length-1]['COUNT(*)'];
-                          // console.log(res.data)
+                         
                       if(this.$refs.pagination.getTotalnum()!=null){
                         if(this.$refs.pagination.getTotalnum()!=settotalnum){
                         
@@ -655,7 +696,9 @@ import url from "../js/totalurl.js";
                       })
               
                       this.updata.then((value)=>{
-                        
+                   //      	 perbaseinfo['province'] = this.taskprovince
+                   // perbaseinfo['city'] = this.taskcity
+                   // perbaseinfo['district'] = this.taskdistrict
                           updateperson.upload = value.avatar
                           updateperson.taskid = value.taskid
                           updateperson.taskname = value.taskname
@@ -666,6 +709,10 @@ import url from "../js/totalurl.js";
                           updateperson.address = value.address
                           updateperson.getsalary = value.salary
                           updateperson.geteducation = value.education;
+                          updateperson.taskmobile = value.mobilphone
+                          updateperson.taskprovince = value.province;
+                          updateperson.taskcity = value.city;
+                          updateperson.taskdistrict = value.district;
                           updateperson.add = 'update';
          
                     
@@ -674,8 +721,8 @@ import url from "../js/totalurl.js";
         
         
         
-
-                  var img = value.proimage;
+                         if(value.proimage!=""){
+                         	 var img = value.proimage;
                   img = img.split(',')
                   // console.log(updateperson.list);
                   updateperson.index = img.length;
@@ -687,6 +734,9 @@ import url from "../js/totalurl.js";
                                     'oldflag':'old'
                                 })
                   }
+
+                         }
+                 
                   
                           
 
@@ -749,13 +799,32 @@ import url from "../js/totalurl.js";
                 },
                 methods:{
                   confirm(){
-                    
-                    this.updata = axios.get(url+'/del.php/?taskid='+id.taskid+'&&method=delete&&userid='+id.userid).then(res=>{
+                    if(typeof(id['comentid'])!="undefined"){
+                    	 axios.post(this.$url+'/comment.php',{comentid:id['comentid']}).then(res=>{
+                      		 
+                      		 	console.log(res.data);
+                      		 
+                      		 })
+                    	  that.createPageInstance("delete",Allchild,that);
+                  
+                    this.reload();
+                    }else if(typeof(id['id'])!="undefined"){
+                    	 axios.post(this.$url+'/comment.php',{replyid:id['id']}).then(res=>{
+                      		 
+                      		 	console.log(res.data);
+                      		 
+                      		 })
+                    	  that.createPageInstance("delete",Allchild,that);
+                    	   this.reload();
+                    }else{
+                    	 this.updata = axios.get(url+'/del.php/?taskid='+id.taskid+'&&method=delete&&userid='+id.userid).then(res=>{
                         console.log(res.data)
                       })
                     that.createPageInstance("delete",Allchild,that);
                   
                     this.reload();
+                    }
+                   
                    
                   },
 
@@ -799,7 +868,7 @@ import url from "../js/totalurl.js";
 
                     if(divname!="addright"){
                       Allchild.clearright(Allchild);
-              new this.tableifm().$mount('#addright')
+                    new this.tableifm().$mount('#addright')
 
                     }else{
                       new this.tableifm().$mount('#addright')
@@ -851,7 +920,8 @@ import url from "../js/totalurl.js";
                         
                    
                         
-                    }
+                    },
+                   
                 }
             })
               
@@ -860,7 +930,256 @@ import url from "../js/totalurl.js";
             
             return Profile;
 
+        },
+        displayComment(Allchild,that,data){
+        	   var Comment = Vue.extend({
+                template:'<div class="tasklist"><table><tr><th v-for="(item,index) in tdhead">{{item}}</th></tr><tr v-for="(item,index) in disdata" v-if="index<datalength"><td>{{item["content"]}}</td><td @click=detleComment(item)>删除</td><td @click=displayReply(item)>查看回复</td></tr></table><pagination ref="pagination" @getpageData="getpagedata"></pagination></div>',
+                // <pagination ref="pagination" @getpageData="getpagedata"></pagination>
+                components: {
+                  pagination,
+                    	
+         
+          
+                },
+                data:function(){
+                    return {
+                       
+                        tdhead:['评论内容','删除',"查看回复"],
+                        datalength:0,
+                     
+                      nowpage:'',
+                      totalpage:'',
+                      diaplaypage:'',
+                      totalnum:'',
+                      disdata:[],
+                         
+                    }
+                },
+                mounted(){
+                	
+                		// this.getallComment();
+                		 this.$refs.pagination.pagename = "commentpagetabele"
+                  this.$refs.pagination.showname = "commentshowtabele"
+                  this.$refs.pagination.totalnumname = "commenttotalnumtable"
+                  this.$refs.pagination.totalpagename = "commenttotalpagetable"
+                  
+                
+                    this.getcommenttable();
+                	// 根据得到的taskid,去寻找相关的commnetid
+                },
+                methods:{
+                	  getcommenttable(){
+              
+
+                   
+                  
+                    axios.post(this.$url+'/comment.php',{topic_id:data['taskid']}).then(res=>{
+                        
+                        var setdata = res.data; 
+                        for(var i =0;i<setdata.length;i++){
+                        setdata[i] = JSON.parse(setdata[i]);
+                        }
+                          var settotalnum = setdata[setdata.length-1]['COUNT(*)'];
+                          
+                         
+                         
+                      if(this.$refs.pagination.getTotalnum()!=null){
+                        if(this.$refs.pagination.getTotalnum()!=settotalnum){
+                        console.log(1)
+                          this.$refs.pagination.extractData(res.data)
+
+                                this.disdata = this.$refs.pagination.disdata;
+                                this.datalength = this.$refs.pagination.datalength;
+                        }else{
+                          console.log(2)
+                          if(this.$refs.pagination.getIndex()!=null&&!isNaN(this.$refs.pagination.getIndex())){
+                            
+                              
+                              this.getpagedata(this.$refs.pagination.getIndex());
+                            }else{
+                              this.$refs.pagination.setIndex(1);
+                              this.getpagedata(this.$refs.pagination.getIndex());
+
+                            }
+                        }
+                      }else{
+                        console.log(3)
+                        this.$refs.pagination.extractData(res.data)
+                              this.disdata = this.$refs.pagination.disdata;
+                              this.datalength = this.$refs.pagination.datalength; 
+                      }
+                         
+                         
+                         
+           
+                      })
+
+                     
+                   
+          
+                  },
+                 getpagedata(index){
+                    // 先把任务的数量拿出来
+                   
+       					var getpagecomment={
+       						'page':index,
+       						'totalnum':this.$refs.pagination.totalnum,
+       						'size':2,
+       						'topic_id':data['taskid']
+       					}
+                       
+                    axios.post(this.$url+'/comment.php',{getpagecomment:getpagecomment}).then(res=>{		
+                    	         this.$refs.pagination.extractpageData(res.data,index);
+                              this.disdata = this.$refs.pagination.disdata;
+                              this.datalength = this.$refs.pagination.datalength; 
+                     //      // console.log(res.data)
+                    })
+                      
+                   
+
+                    
+                     
+                     
+                  },
+                
+                  detleComment(item){
+                  	  if(document.getElementById('dialogue')!=null){
+
+                        that.createDialog(Allchild,that,item).$mount('#dialogue')
+                      }
+                  	// 根据获得的commentid删除相应的数据
+                  },
+                  displayReply(item){
+                  	// 显示所有的reply
+                  	 var divname=Allchild.$root.$el.getElementsByClassName("right")[0].childNodes[0].getAttribute('id')
+                    	var Reply = that.displayReply(Allchild,that,item);
+                    	 if(divname!="addright"){
+                          Allchild.clearright(Allchild)
+                        }
+                    	new Reply().$mount("#addright")
+                  }
+               
+                }
+            })
+        	   return Comment;
+        },
+        displayReply(Allchild,that,data){
+        	
+        	 var Reply = Vue.extend({
+                template:'<div class="tasklist"><table><tr><th v-for="(item,index) in tdhead">{{item}}</th></tr><tr v-for="(item,index) in disdata" v-if="index<datalength"><td>{{item["from_name"]}}</td><td>{{item["reply_name"]}}</td><td>{{item["content"]}}</td><td @click=detleReply(item)>删除</td></tr></table><pagination ref="pagination" @getpageData="getpagedata"></pagination></div>',
+                // <pagination ref="pagination" @getpageData="getpagedata"></pagination>
+              	 components: {
+                  pagination,
+                    	
+         
+          
+                },
+                data:function(){
+                    return {
+                        reply:[],
+                        tdhead:['用户','回复用户',"内容","删除"],
+                        datalength:0,
+                     
+                      nowpage:'',
+                      totalpage:'',
+                      diaplaypage:'',
+                      totalnum:'',
+                      disdata:[],
+                         
+                    }
+                },
+                  mounted(){
+                	
+                		// this.getallComment();
+                		 this.$refs.pagination.pagename = "replypagetabele"
+                  this.$refs.pagination.showname = "replyshowtabele"
+                  this.$refs.pagination.totalnumname = "replytotalnumtable"
+                  this.$refs.pagination.totalpagename = "replyztotalpagetable"
+                  
+                
+                    this.getallReply();
+                	// 根据得到的taskid,去寻找相关的commnetid
+                },
+                methods:{
+                  getallReply(){
+                  	 axios.post(this.$url+'/comment.php',{comment_id:data['comentid']}).then(res=>{
+                      		 
+                      		 	
+                      		 	
+                      		 	 var setdata = res.data; 
+                        for(var i =0;i<setdata.length;i++){
+                        setdata[i] = JSON.parse(setdata[i]);
+                        }
+                          var settotalnum = setdata[setdata.length-1]['COUNT(*)'];
+                          
+                         
+                         
+                      if(this.$refs.pagination.getTotalnum()!=null){
+                        if(this.$refs.pagination.getTotalnum()!=settotalnum){
+                        console.log(1)
+                          this.$refs.pagination.extractData(res.data)
+
+                                this.disdata = this.$refs.pagination.disdata;
+                                this.datalength = this.$refs.pagination.datalength;
+                        }else{
+                          console.log(2)
+                          if(this.$refs.pagination.getIndex()!=null&&!isNaN(this.$refs.pagination.getIndex())){
+                            
+                              
+                              this.getpagedata(this.$refs.pagination.getIndex());
+                            }else{
+                              this.$refs.pagination.setIndex(1);
+                              this.getpagedata(this.$refs.pagination.getIndex());
+
+                            }
+                        }
+                      }else{
+                        console.log(3)
+                        this.$refs.pagination.extractData(res.data)
+                              this.disdata = this.$refs.pagination.disdata;
+                              this.datalength = this.$refs.pagination.datalength; 
+                      }
+                      		 	
+                      		 })
+                  },
+                    getpagedata(index){
+                    // 先把任务的数量拿出来
+                   
+       					var getpagereply={
+       						'page':index,
+       						'totalnum':this.$refs.pagination.totalnum,
+       						'size':2,
+       						'comment_id':data['comentid']
+       					}
+                       
+                    axios.post(this.$url+'/comment.php',{getpagereply:getpagereply}).then(res=>{		
+                    	        this.$refs.pagination.extractpageData(res.data,index);
+                              	this.disdata = this.$refs.pagination.disdata;
+                              	this.datalength = this.$refs.pagination.datalength; 
+                     //      // console.log(res.data)
+                    })
+                      
+                   
+
+                    
+                     
+                     
+                  },
+                  detleReply(item){
+                  	  if(document.getElementById('dialogue')!=null){
+
+                        that.createDialog(Allchild,that,item).$mount('#dialogue')
+                      }
+                  	// 根据获得的commentid删除相应的数据
+                  },
+                
+               
+                }
+            })
+        	   return Reply;
+
         }
+
       }
 
        
@@ -962,6 +1281,9 @@ import url from "../js/totalurl.js";
     content: "";
     display: block;
     clear: both;
+  }
+ .taskarea label{
+ 	margin-right: 1%;
   }
 .blackground{
   position:absolute;

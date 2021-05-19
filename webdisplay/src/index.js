@@ -14,6 +14,7 @@ import order from "./vue/order.vue"
 import forget from "./vue/forget.vue"
 import back from "./vue/back.vue"
 import test from "./vue/test.vue"
+import comment from "./vue/comment.vue"
 import mboss from "./vue/mobile/mboss.vue"
 import mfree from "./vue/mobile/mfree.vue"
 import mchat from "./vue/mobile/mchat.vue"
@@ -23,12 +24,14 @@ import display from "./vue/dispalymodel/displaymodel.vue"
 import common from './js/gobal'
 import url from './js/totalurl'
 import newmessage from './js/newmsg'
+import getDate from './js/getDate'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 // import 'lib-flexible'
 
 
 Vue.prototype.$common = common;
+Vue.prototype.$getDate = getDate;
 Vue.prototype.$newmessage = newmessage;
 Vue.prototype.$url = url;
 Vue.use(VueRouter)
@@ -47,6 +50,7 @@ const router = new VueRouter({
     {path:'/forget',component:forget},
     {path:'/back',component:back},
     {path:'/test',component:test},
+    {path:'/comment',component:comment},
     {path:'/resume',component:resume},
     {path:'/mboss',component:mboss},
     {path:'/mfree',component:mfree},
